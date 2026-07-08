@@ -110,6 +110,9 @@ register the result instead of picking one candidate and copying it.
   loaded "module" already, and why there's no separate runtime for that.
 - `references/roadmap.md` — what's built vs. planned, and why the next phase
   should mostly use this architecture rather than keep expanding it.
+- `references/api-reference.md` — every exported symbol across `snippets/`,
+  `providers/`, `plugins/`, `commands/`, `tokens/`, and `analysis/`,
+  classified Public/Internal/Interface-only.
 - `analysis/` — the `ProjectProfile` type/README for the repo-intelligence
   stage, and the `CreativeBrief` type/doc for the intent stage.
 - `plugins/` — the plugin runtime wrapping design-source providers (21st.dev,
