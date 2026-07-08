@@ -1,6 +1,6 @@
 import { Reveal } from "../../snippets/motion/reveal";
 import { StaggerContainer, StaggerItem } from "../../snippets/motion/stagger-container";
-import { SpotlightFollow } from "../../snippets/motion/spotlight-follow";
+import { FeatureCard } from "./feature-card";
 
 interface Feature {
   title: string;
@@ -24,7 +24,7 @@ const features: Feature[] = [
 
 export function Features() {
   return (
-    <section className="mx-auto max-w-5xl px-6 py-24">
+    <section id="features" className="mx-auto max-w-5xl px-6 py-24">
       <Reveal className="max-w-2xl">
         <h2 className="text-3xl font-semibold tracking-tight">
           Everything after the call, handled
@@ -36,10 +36,7 @@ export function Features() {
       <StaggerContainer className="mt-12 grid gap-6 sm:grid-cols-3">
         {features.map((feature) => (
           <StaggerItem key={feature.title}>
-            <SpotlightFollow className="h-full rounded-2xl border border-border bg-card p-6">
-              <h3 className="text-lg font-medium">{feature.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{feature.description}</p>
-            </SpotlightFollow>
+            <FeatureCard title={feature.title} description={feature.description} />
           </StaggerItem>
         ))}
       </StaggerContainer>
