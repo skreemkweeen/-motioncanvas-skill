@@ -1,0 +1,21 @@
+{
+  "name": "motioncanvas-showcase",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Isolated before/after screenshot pipeline for examples/gallery-style showcases. Never a dependency of the core skill's typecheck/lint/CI — see README.md.",
+  "scripts": {
+    "capture": "node tooling/capture.mjs"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "esbuild": "^0.24.2",
+    "framer-motion": "^11.18.2",
+    "playwright": "^1.49.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.9.3"
+  }
+}
