@@ -46,9 +46,16 @@ Priority areas, roughly in order of tractability:
 Every PR against one of these areas must include a concrete before/after
 example (not just an assertion of improvement) demonstrating why the
 change produces noticeably better output — see `examples/gallery/` for the
-existing before/after-shaped walkthroughs to extend, and
-`examples/ai-saas-landing/` for the level of reasoning a real before/after
-comparison should show.
+existing before/after-shaped walkthroughs to extend, `examples/ai-saas-landing/`
+for the level of reasoning a real before/after comparison should show, and
+`showcase/` for real rendered screenshots when a code-level comparison
+alone doesn't make the difference legible. Building a showcase is also a
+real verification step, not just documentation — rendering
+`showcase/landing-page/`'s "after" side for the first time surfaced three
+shipped bugs (a Tailwind key-casing mismatch, a component that silently
+ignored its own documented usage, and invisible CTA text) that
+`typecheck`/`lint` had no way to catch. Expect building future showcases to
+keep finding real issues, not just illustrate known-good output.
 
 Two specific, previously-listed ideas stay in scope under this framing
 because they're genuinely about output quality, not new infrastructure:

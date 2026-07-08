@@ -97,6 +97,9 @@ validate:registry`)
   reference builds, plus a 7-walkthrough gallery
 - [`analysis/`](.claude/skills/motioncanvas/analysis) — the `ProjectProfile`
   and `CreativeBrief` data shapes for the repo-intelligence and intent stages
+- [`showcase/`](.claude/skills/motioncanvas/showcase) — a real, isolated
+  before/after screenshot pipeline (never a dependency of this repo's own
+  typecheck/lint/CI)
 - [`references/roadmap.md`](.claude/skills/motioncanvas/references/roadmap.md) —
   what's built vs. planned
 - [`references/api-reference.md`](.claude/skills/motioncanvas/references/api-reference.md) —

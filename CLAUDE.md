@@ -56,6 +56,11 @@ validate:registry`) — see `commands/README.md`.
 - `.claude/skills/motioncanvas/analysis/` — the `ProjectProfile` type and
   README for the repo-intelligence workflow stage (filled in by reading the
   target repo, not an automated scanner).
+- `.claude/skills/motioncanvas/showcase/` — a real before/after screenshot
+  pipeline (Playwright + esbuild + Tailwind), fully isolated: its own
+  `package.json`/`node_modules`, excluded from the root `tsconfig.json`/
+  `eslint.config.js`/CI — never a dependency of the commands above. See
+  `showcase/README.md`.
 
 See `references/architecture.md` for a diagram of how these fit together,
 and `CONTRIBUTING.md` for the contributor-facing setup/rules.
