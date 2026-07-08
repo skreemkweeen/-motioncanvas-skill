@@ -11,7 +11,11 @@ generic default UI.
 The root `package.json`/`tsconfig.json`/`eslint.config.js` exist purely to
 type-check and lint the TypeScript under `.claude/skills/motioncanvas/` — run
 `npm install` then `npm run typecheck` / `npm run lint` / `npm run format`
-before committing changes to any `.ts`/`.tsx` file in this repo.
+before committing changes to any `.ts`/`.tsx` file in this repo. Three more
+scripts actually _execute_ code rather than just typecheck it: `npm run
+plugins:smoke` (the plugin runtime), `npm run validate:registry` (command-
+registry drift check), and `npm run tokens:build` (regenerates the design
+token artifacts) — see `CONTRIBUTING.md`.
 
 ## Layout
 
@@ -31,9 +35,21 @@ before committing changes to any `.ts`/`.tsx` file in this repo.
 - `.claude/skills/motioncanvas/providers/` — a small interface layer
   (`Provider<TQuery, TResult>` plus domain-specific extensions) so new
   inspiration/component/motion/template/asset sources can be added without
-  editing `SKILL.md`. Two providers have real local implementations
-  (`ComponentRegistryProvider`, `MotionLibraryProvider`); the rest are
-  interfaces only — see `providers/README.md` for which is which and why.
+  editing `SKILL.md`. Most providers have real implementations, scoped
+  honestly (a local-JSON pattern for sources with no public API, a real
+  Figma REST API client, real local-file Spline asset resolution) — see
+  `providers/README.md` for which is which and why.
+- `.claude/skills/motioncanvas/plugins/` — a real, executed in-process
+  plugin runtime (registration, dependency resolution, version
+  compatibility, config validation, filesystem discovery) wrapping
+  providers, plus example plugins and a real smoke test (`npm run
+plugins:smoke`) — see `plugins/README.md`.
+- `.claude/skills/motioncanvas/commands/` — a metadata catalog of this
+  skill's own workflow entry points, with a drift validator (`npm run
+validate:registry`) — see `commands/README.md`.
+- `.claude/skills/motioncanvas/tokens/` — the design-token compiler: one
+  source of truth (`design-tokens.ts`) compiled to CSS/Tailwind/TypeScript/
+  JSON via `npm run tokens:build` — see `tokens/README.md`.
 - `.claude/skills/motioncanvas/examples/ai-saas-landing/` — one complete,
   worked run of the SKILL.md workflow end to end, meant as the model for how
   much reasoning a real build should show, not just its code.
@@ -55,9 +71,13 @@ and `CONTRIBUTING.md` for the contributor-facing setup/rules.
   Awwwards, Spline, etc.) — the skill explicitly does not fetch anything at
   runtime; see `references/providers.md` and `providers/README.md` for how
   those are meant to be used instead.
-- Any new file under `snippets/`, `providers/`, or `examples/` must pass
-  `npm run typecheck` and `npm run lint` (strict TypeScript, no `any`
-  escape hatches without reason) before it's committed.
+- Any new file under `snippets/`, `providers/`, `plugins/`, `commands/`,
+  `tokens/`, or `examples/` must pass `npm run typecheck` and `npm run lint`
+  (strict TypeScript, no `any` escape hatches without reason) before it's
+  committed. If it's meant to actually run (a plugin, a compiler), extend
+  `npm run plugins:smoke` / `tokens:build` / `validate:registry` (or add a
+  new script following that pattern) so it's genuinely exercised, not just
+  typechecked.
 - Don't add a provider implementation that fakes a live integration — an
   interface with no backing implementation is more honest than a stub that
   returns empty arrays and claims to work.

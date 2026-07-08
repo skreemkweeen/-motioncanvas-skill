@@ -17,14 +17,27 @@ use it directly in a Claude Code session opened on this repo.
   `FloatingCard`, `CursorGlow`, `AuroraBackground`, and more)
 - [`providers/`](.claude/skills/motioncanvas/providers) — a small interface
   layer for pluggable design-inspiration/component/motion/template/asset
-  sources; two have real local implementations, the rest are documented
-  interfaces with no live integration shipped
+  sources; most have real implementations scoped honestly (a local-JSON
+  pattern, a real Figma REST client, real local Spline asset resolution),
+  see `providers/README.md` for exactly what each can and can't do
+- [`plugins/`](.claude/skills/motioncanvas/plugins) — a real, executed
+  in-process plugin runtime wrapping those providers (registration,
+  dependency resolution, version checks, discovery), with a real smoke test
+  (`npm run plugins:smoke`)
+- [`commands/`](.claude/skills/motioncanvas/commands) — a metadata catalog
+  of this skill's workflow entry points, with a drift validator (`npm run
+validate:registry`)
+- [`tokens/`](.claude/skills/motioncanvas/tokens) — the design-token
+  compiler: one source of truth compiled to CSS/Tailwind/TypeScript/JSON
+  (`npm run tokens:build`)
 - [`examples/ai-saas-landing/`](.claude/skills/motioncanvas/examples/ai-saas-landing) —
   one complete reference build walked through the full skill workflow
 - [`analysis/`](.claude/skills/motioncanvas/analysis) — the `ProjectProfile`
   type for the repo-intelligence workflow stage
 - [`references/architecture.md`](.claude/skills/motioncanvas/references/architecture.md) —
   a diagram of how all of the above fit together
+- [`references/roadmap.md`](.claude/skills/motioncanvas/references/roadmap.md) —
+  what's built vs. planned
 
 ## Contributing
 
