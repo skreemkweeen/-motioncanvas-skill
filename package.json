@@ -8,10 +8,14 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --check .",
-    "format:write": "prettier --write ."
+    "format:write": "prettier --write .",
+    "plugins:smoke": "node scripts/plugins-smoke.mjs",
+    "validate:registry": "node scripts/validate-registry.mjs",
+    "tokens:build": "node scripts/build-tokens.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.0",
+    "@types/node": "^22.20.0",
     "@types/react": "^18.3.31",
     "eslint": "^9.39.0",
     "eslint-plugin-react-hooks": "^5.2.0",

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "example-bento-grid",
+    "title": "Bento grid feature layout",
+    "category": "hero",
+    "keywords": ["grid", "bento", "features", "hero"],
+    "style": "bold",
+    "notes": "Asymmetric grid of feature tiles, varying tile sizes for visual hierarchy — reimplement with CSS grid + design-system.md's spacing scale, not copied markup.",
+    "sourceUrl": "https://21st.dev"
+  },
+  {
+    "id": "example-spotlight-card",
+    "title": "Spotlight hover card",
+    "category": "card",
+    "keywords": ["card", "hover", "spotlight"],
+    "style": "minimal",
+    "notes": "Pointer-following highlight on card hover — this skill already ships this as snippets/motion/spotlight-follow.tsx; reuse that instead of rebuilding it.",
+    "sourceUrl": "https://21st.dev"
+  }
+]
