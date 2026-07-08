@@ -87,7 +87,7 @@ beyond "import a file from a directory you pointed it at." See
 
 ## Not yet built
 
-- Live adapters for design-inspiration sources with no official public API
+- Live providers for design-inspiration sources with no official public API
   (Mobbin, Awwwards, and 21st.dev/Magic UI/Aceternity UI beyond the
   local-catalog pattern) — see `providers/README.md`.
 - A `TemplateProvider` implementation — only one reference example exists so

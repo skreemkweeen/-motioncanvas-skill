@@ -18,10 +18,11 @@ registers, version-checks, dependency-resolves, and enables/disables.
   `*.plugin.{ts,js,mjs}` files and dynamically imports + registers each
   one's default export. This is a Node-side dev-time convenience (a build
   script, a CLI) — it is never bundled into a browser build.
-- **`examples/`** — five real plugins wrapping the design-source adapters in
-  `providers/` (mock, a local-JSON-catalog example standing in for 21st.dev,
-  Figma, Spline, and an aggregator that depends on two of the others), plus
-  `run-smoke.ts` — an actually-executed smoke test, not just a typechecked
+- **`examples/`** — real plugins wrapping the providers in `providers/` (mock,
+  a local-JSON-catalog example standing in for 21st.dev, Figma, Spline, an
+  aggregator that depends on two of the others, plus the local component
+  registry and motion catalog), plus `run-smoke.ts` — an actually-executed
+  smoke test, not just a typechecked
   stub. Run it with `npm run plugins:smoke` from the repo root.
 
 ## Enabling plugins with dependencies
