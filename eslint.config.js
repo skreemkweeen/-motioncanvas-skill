@@ -5,7 +5,15 @@ import reactHooks from "eslint-plugin-react-hooks";
 export default tseslint.config(
   // dist-tools/ is generated output from npm run plugins:smoke /
   // validate:registry (a throwaway build), not source code — never lint it.
-  { ignores: ["node_modules/**", "dist-tools/**"] },
+  // showcase/ is a fully isolated package with its own tsconfig/tooling
+  // (see its README) — never a dependency of this repo's own lint/CI gate.
+  {
+    ignores: [
+      "node_modules/**",
+      "dist-tools/**",
+      ".claude/skills/motioncanvas/showcase/**",
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {

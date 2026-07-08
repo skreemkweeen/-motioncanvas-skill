@@ -22,8 +22,14 @@ export function compileToTailwindTheme(tokens: DesignTokens): TailwindThemeExten
   >;
   const colors: Record<string, string> = {};
   for (const key of colorKeys) {
+    // Tailwind emits theme keys verbatim into class names (`text-${key}`) —
+    // it does not camelCase-to-kebab-case convert them the way this file
+    // converts a key into its CSS custom property name. Use the same
+    // kebab-case form for both, so `text-muted-foreground` (the class every
+    // component in this repo, and shadcn/ui's convention, actually writes)
+    // resolves to a real Tailwind color instead of silently doing nothing.
     const cssName = key.replace(/([A-Z])/g, "-$1").toLowerCase();
-    colors[key] = `var(--color-${cssName})`;
+    colors[cssName] = `var(--color-${cssName})`;
   }
 
   const spacing: Record<string, string> = {};
