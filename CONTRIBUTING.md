@@ -70,3 +70,13 @@ motion primitive, provider, or reference example.
 Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, `refactor:`), one
 logical change per commit — a new subsystem and an unrelated formatting pass
 don't belong in the same commit.
+
+## Filing issues and PRs
+
+Use the bug report / feature request templates under
+`.github/ISSUE_TEMPLATE/` — the feature request template's scope checklist
+is the fastest way to catch a proposal that conflicts with "No fake
+integrations" or "No unjustified new dependencies" before any code gets
+written. PRs get `.github/pull_request_template.md`'s checklist, which
+mirrors the Setup commands above plus the "document in the same change" and
+"no breaking changes" rules from this file.
