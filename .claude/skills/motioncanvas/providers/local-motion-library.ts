@@ -23,6 +23,16 @@ const catalog: readonly MotionPrimitiveMetadata[] = [
     respectsReducedMotion: true,
   },
   {
+    id: "presets",
+    name: "MotionPresets",
+    filePath: "snippets/motion/presets.ts",
+    kind: "tokens",
+    description:
+      "Eight named alternate token sets (Apple, Linear, Stripe, Editorial, Playful, Enterprise, Minimal, Luxury) — curated aesthetic interpretations, not measured data.",
+    dependencies: ["framer-motion"],
+    respectsReducedMotion: true,
+  },
+  {
     id: "fade",
     name: "Fade",
     filePath: "snippets/motion/fade.tsx",

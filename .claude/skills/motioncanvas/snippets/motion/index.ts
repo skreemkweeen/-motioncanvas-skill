@@ -1,4 +1,5 @@
 export * from "./tokens";
+export * from "./presets";
 export * from "./fade";
 export * from "./slide";
 export * from "./reveal";

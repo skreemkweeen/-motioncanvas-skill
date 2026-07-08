@@ -16,6 +16,16 @@ Shared duration/ease/spring/distance/stagger constants. Import these into any
 custom motion code instead of hand-rolling values, so a project's motion
 stays one system. See `references/motion-principles.md` for the rationale.
 
+## Presets (`presets.ts`)
+
+Eight named alternate token sets — Apple, Linear, Stripe, Editorial, Playful,
+Enterprise, Minimal, Luxury — each a full duration/ease/spring/distance/stagger
+set plus qualitative interaction notes, for swapping a project's whole motion
+feel at once instead of tuning `tokens.ts` values one at a time. **These are
+curated aesthetic interpretations of what each name evokes, not timing values
+measured from the real products** — say so if you tell a user which preset
+you used.
+
 ## Entrance primitives
 
 | Component      | Trigger                                     | Use for                                                                                              |
