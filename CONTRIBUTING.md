@@ -64,6 +64,13 @@ motion primitive, provider, or reference example.
 - **No breaking changes to existing exported names/types** without a
   migration note in the PR description; prefer additive (new optional
   fields, new files) over rewriting what's there.
+- **Post-v1.0, no new infrastructure.** Before proposing a PR, ask: does
+  this directly improve the UI a developer receives from this skill? If
+  not — a new provider, registry, hook, context, config file, or reference
+  doc not attached to a concrete output-quality improvement — don't build
+  it. See `references/roadmap.md`'s "Next: output quality, not more
+  architecture" for the current priority areas, each of which requires a
+  before/after example in the PR, not just an assertion of improvement.
 
 ## Commit style
 

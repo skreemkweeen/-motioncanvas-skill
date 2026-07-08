@@ -22,6 +22,13 @@
       working implementation that returns empty/hardcoded data
 - [ ] No breaking change to an existing exported name/type, or the migration
       note is included below if there is one
+- [ ] If this is an output-quality PR (better landing pages/dashboards/SaaS
+      apps/design systems/component modernization/motion/accessibility/
+      repository-aware refactoring — see `references/roadmap.md`): a
+      concrete before/after example is included, not just an assertion of
+      improvement
+- [ ] Not new infrastructure without a concrete output-quality improvement
+      attached (`CONTRIBUTING.md`'s "Post-v1.0, no new infrastructure" rule)
 
 ## Migration notes (if any exported name/type changed or was removed)
 
