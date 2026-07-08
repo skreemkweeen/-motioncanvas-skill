@@ -7,18 +7,19 @@ those instead — never run two parallel scales in one codebase.
 
 Modular scale, ratio 1.25 ("major third"), base 16px:
 
-| Token | Size | Line height | Use |
-|---|---|---|---|
-| `text-xs` | 12.8px | 1.5 | metadata, captions |
-| `text-sm` | 14px | 1.5 | secondary body |
-| `text-base` | 16px | 1.6 | body |
-| `text-lg` | 20px | 1.4 | lead paragraph |
-| `text-xl` | 25px | 1.3 | small heading |
-| `text-2xl` | 31px | 1.2 | section heading |
-| `text-3xl` | 39px | 1.15 | page heading |
-| `text-4xl`+ | 49px+ | 1.05–1.1 | hero display |
+| Token       | Size   | Line height | Use                |
+| ----------- | ------ | ----------- | ------------------ |
+| `text-xs`   | 12.8px | 1.5         | metadata, captions |
+| `text-sm`   | 14px   | 1.5         | secondary body     |
+| `text-base` | 16px   | 1.6         | body               |
+| `text-lg`   | 20px   | 1.4         | lead paragraph     |
+| `text-xl`   | 25px   | 1.3         | small heading      |
+| `text-2xl`  | 31px   | 1.2         | section heading    |
+| `text-3xl`  | 39px   | 1.15        | page heading       |
+| `text-4xl`+ | 49px+  | 1.05–1.1    | hero display       |
 
 Rules of thumb:
+
 - Never more than 3 sizes visible in one viewport unless it's a data table.
 - Tighten line-height as size increases; loosen as it decreases.
 - Kerning: rely on the system/variable font's default tracking except for

@@ -3,7 +3,7 @@
 This skill has no live network access to any of the sites below — there is no
 scraper, no API client, no cached index. "Using" one of these sources means:
 draw on general knowledge of the patterns that ecosystem is known for, and
-reimplement the *pattern* (a layout idea, an interaction idea, a motion
+reimplement the _pattern_ (a layout idea, an interaction idea, a motion
 technique) in this project's own stack, tokens, and components. Never assert
 that a specific page or component was fetched, scored, or copied from a named
 site — that would be a fabricated claim.
@@ -16,7 +16,7 @@ given), not as a trigger to pretend broader access exists.
 
 - **Aceternity UI, Magic UI, Origin UI, HeroUI** — known for animated
   marketing-site patterns (spotlight cards, bento grids, animated borders,
-  marquees). Reimplement the *technique* with this project's Tailwind tokens
+  marquees). Reimplement the _technique_ with this project's Tailwind tokens
   and whichever motion library it already depends on.
 - **Shadcn UI / Radix** — the default source for accessible primitives
   (dialog, dropdown, popover, tabs, etc.) before building any of these from

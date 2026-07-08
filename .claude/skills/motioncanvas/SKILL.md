@@ -71,7 +71,7 @@ Prefer the earliest option that satisfies the requirement.
 - `references/design-system.md` — type scale, spacing scale, color/dark-mode
   approach, layout/grid defaults.
 - `references/motion-principles.md` — easing/spring defaults, staggering,
-  scroll-linked reveals, reduced-motion handling, when *not* to animate.
+  scroll-linked reveals, reduced-motion handling, when _not_ to animate.
 - `references/quality-checklist.md` — the self-review pass: visual hierarchy,
   accessibility, performance, responsive/dark-mode correctness.
 - `references/providers.md` — how to draw on external design ecosystems
@@ -92,6 +92,40 @@ into the target project and adapt names/tokens rather than reinventing per reque
   variant commented alongside for projects that already depend on GSAP.
 - `button.example.tsx` — a worked example composing the above into one component,
   as a reference for the bar to hit (states, focus ring, reduced motion, memoized).
+- `motion/` — a twelve-primitive library (`Fade`, `Slide`, `Reveal`,
+  `StaggerContainer`/`StaggerItem`, `ScrollReveal`, `HeroReveal`, `SpotlightFollow`,
+  `AnimatedBorder`, `FloatingCard`, `CursorGlow`, `AuroraBackground`, plus shared
+  `tokens.ts`) built on the same provider/hooks above. See `motion/README.md` for
+  what each one is for and when _not_ to reach for it.
+
+## Provider architecture
+
+`providers/` decouples "where does inspiration/component metadata/motion catalog
+data/templates/assets come from" from this workflow, so a new source can be added
+without editing this file. `ComponentRegistryProvider` and `MotionLibraryProvider`
+have real local implementations; `DesignInspirationProvider`, `TemplateProvider`,
+and `AssetProvider` are interfaces only — there is no live integration with any
+external service shipped here. See `providers/README.md` before claiming this
+skill can search/score/fetch from a named external source; it can't, yet.
+
+## Reference workflow example
+
+`examples/ai-saas-landing/` is a complete, worked run of this workflow end to end
+(requirements → design rationale → tokens → motion decisions → accessibility
+review → performance notes → implementation) for a fictional AI SaaS landing
+page. Read its `README.md` as the model for how much reasoning a real build
+should show, not just its code.
+
+## Contributing to this skill
+
+The repo root has a `package.json`/`tsconfig.json`/`eslint.config.js` scoped to
+`snippets/`, `providers/`, and `examples/` — `npm install`, then `npm run
+typecheck` and `npm run lint` before adding or editing anything in those
+directories. There's no test framework here on purpose: this is a reference
+library copied into other projects, not a published package with its own runtime
+behavior to unit-test: typecheck + lint is the meaningful bar. Add real tests
+if that stops being true (e.g. a primitive gains non-trivial logic worth
+asserting on in isolation).
 
 ## Output expectations
 

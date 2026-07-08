@@ -84,7 +84,7 @@ const variants = shouldReduceMotion
 - Debounce/rAF-throttle pointer-driven effects (magnetic buttons, cursor
   followers) — never animate directly off a raw unthrottled mousemove handler.
 
-## When *not* to animate
+## When _not_ to animate
 
 - Form validation errors, critical alerts, and anything blocking user
   progress — show instantly, don't make the user wait out a transition.
