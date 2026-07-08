@@ -40,23 +40,30 @@ tooling; the core skill is not.
 ```
 cd showcase
 npm install
-npm run capture
+npm run capture              # every showcase
+npm run capture -- dashboard # one showcase, by directory name
 ```
 
-Regenerates every `*/screenshots/*.png` under this directory. Commit the
-resulting PNGs alongside any change to the components a showcase covers.
+Regenerates every `*/screenshots/*.png` under this directory (or just the
+named showcase's). Commit the resulting PNGs alongside any change to the
+components a showcase covers.
 
 ## Showcases
 
 - [`landing-page/`](landing-page/README.md) — the AI SaaS landing page from
   `examples/ai-saas-landing/` vs. a plausible default/unguided generation of
   the same request.
+- [`dashboard/`](dashboard/README.md) — the internal analytics dashboard
+  from `examples/analytics-dashboard/` vs. a plausible default generation —
+  the sharpest contrast to `landing-page/`: dense, low-motion, dark-mode-
+  first instead of persuasive and single-theme.
 
 More will be added incrementally, one at a time with real captured
 screenshots each — see `references/roadmap.md`'s output-quality priority
 list. Building many at once without capturing and reviewing each for real
 is exactly the kind of rushed, shallow output this skill has avoided
-throughout its history; three real, previously-shipped bugs were found and
-fixed while building the one showcase that exists today (see
-`landing-page/VISUAL_DIFF.md`) — that's the value of actually rendering the
-screenshot rather than assuming the code is correct because it typechecks.
+throughout its history; real, previously-unnoticed bugs were found and
+fixed while building each of the two showcases that exist today (three in
+`landing-page/`, one in `dashboard/` — see each one's own `VISUAL_DIFF.md`)
+— that's the value of actually rendering the screenshot rather than
+assuming the code is correct because it typechecks.
