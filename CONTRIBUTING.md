@@ -71,6 +71,24 @@ Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, `refactor:`), one
 logical change per commit — a new subsystem and an unrelated formatting pass
 don't belong in the same commit.
 
+## Versioning
+
+`package.json`'s `version` exists to track this skill's own maturity, not to
+publish a package — nothing here is published to npm. Bump it (and add a
+`CHANGELOG.md` entry, and tag the commit `vX.Y.Z`) following semver's intent
+applied to `references/api-reference.md`'s Public symbols:
+
+- **Major** — a breaking change to a Public export's name/type/signature, or
+  removing a documented capability.
+- **Minor** — a new capability added additively: a new motion primitive,
+  provider implementation, plugin, or reference doc.
+- **Patch** — bug fixes, documentation corrections, and stability-review
+  cleanup (dead code, unused exports) that don't change the Public surface.
+
+Update `CHANGELOG.md` (Keep a Changelog format) in the same PR that bumps
+the version — not as a follow-up. `.github/RELEASE_TEMPLATE.md` has the
+section headings to copy into the GitHub release notes when tagging.
+
 ## Filing issues and PRs
 
 Use the bug report / feature request templates under
