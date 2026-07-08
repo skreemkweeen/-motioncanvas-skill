@@ -11,14 +11,22 @@ import { useRef, type RefObject } from "react";
 import { useScroll, useTransform, type MotionValue } from "framer-motion";
 import { useMotionPreferences } from "./motion-provider";
 
-interface PremiumScrollResult {
-  ref: RefObject<HTMLElement | null>;
+interface PremiumScrollResult<T extends HTMLElement> {
+  // T itself (not `T | null`) — matches the standard `useRef<T>(null)`
+  // idiom. Parameterizing RefObject with `T | null` instead is a common trap:
+  // it type-checks here but silently fails variance-based assignability
+  // elsewhere (e.g. passing it straight to `ref=` on an `m.div`), because TS
+  // compares generic RefObject<T> instantiations by their type argument
+  // rather than always expanding the member type first.
+  ref: RefObject<T>;
   opacity: MotionValue<number>;
   y: MotionValue<number>;
 }
 
-export function usePremiumScroll(): PremiumScrollResult {
-  const ref = useRef<HTMLElement | null>(null);
+export function usePremiumScroll<
+  T extends HTMLElement = HTMLElement,
+>(): PremiumScrollResult<T> {
+  const ref = useRef<T>(null);
   const { reducedMotion } = useMotionPreferences();
 
   const { scrollYProgress } = useScroll({
@@ -27,11 +35,7 @@ export function usePremiumScroll(): PremiumScrollResult {
   });
 
   const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const y = useTransform(
-    scrollYProgress,
-    [0, 1],
-    reducedMotion ? [0, 0] : [24, 0],
-  );
+  const y = useTransform(scrollYProgress, [0, 1], reducedMotion ? [0, 0] : [24, 0]);
 
   return { ref, opacity, y };
 }

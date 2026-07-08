@@ -20,11 +20,7 @@ function cn(...classes: Array<string | false | null | undefined>) {
 // from the spreadable native props so `m.button` wins for those keys.
 type NativeButtonProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
-  | "onDrag"
-  | "onDragStart"
-  | "onDragEnd"
-  | "onAnimationStart"
-  | "onAnimationEnd"
+  "onDrag" | "onDragStart" | "onDragEnd" | "onAnimationStart" | "onAnimationEnd"
 >;
 
 interface PremiumButtonProps extends NativeButtonProps {
@@ -64,9 +60,7 @@ export const PremiumButton = forwardRef<HTMLButtonElement, PremiumButtonProps>(
         )}
         {...props}
       >
-        {loading ? (
-          <SpinnerIcon aria-hidden className="h-4 w-4 animate-spin" />
-        ) : null}
+        {loading ? <SpinnerIcon aria-hidden className="h-4 w-4 animate-spin" /> : null}
         {children}
       </m.button>
     );
