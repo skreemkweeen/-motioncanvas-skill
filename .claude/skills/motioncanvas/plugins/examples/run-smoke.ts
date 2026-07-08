@@ -28,6 +28,7 @@ import motionCatalogPlugin, {
 } from "./motion-catalog.plugin.js";
 import { summarizeProjectProfile } from "../../analysis/project-profile.js";
 import { summarizeCreativeBrief } from "../../analysis/creative-brief.js";
+import { INTENT_CATEGORIES } from "../../analysis/intent-taxonomy.js";
 import type { RegisteredComponentMetadata } from "../../providers/component-registry-provider.js";
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
@@ -343,6 +344,21 @@ async function main(): Promise<void> {
   assert(
     briefSummary.includes("Animation strategy: stripe preset"),
     "summarizeCreativeBrief renders animation strategy",
+  );
+
+  // --- intent taxonomy: structural integrity of the lookup table ----------
+  assert(
+    INTENT_CATEGORIES.length === 11,
+    "INTENT_CATEGORIES has all 11 documented categories",
+  );
+  const intentIds = new Set(INTENT_CATEGORIES.map((category) => category.id));
+  assert(
+    intentIds.size === INTENT_CATEGORIES.length,
+    "every INTENT_CATEGORIES entry has a unique id",
+  );
+  assert(
+    INTENT_CATEGORIES.every((category) => category.coreFeatures.length > 0),
+    "every INTENT_CATEGORIES entry documents at least one core feature",
   );
 
   if (failures > 0) {
