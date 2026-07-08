@@ -63,8 +63,8 @@ Measured on this repo's current state, not estimated:
 
 | What                                                           | Measured                    | How                                                                                                      |
 | -------------------------------------------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `SKILL.md` size (the always-loaded file)                       | 191 lines / 11,110 bytes    | `wc -l -c SKILL.md`                                                                                      |
-| All `references/*.md` combined                                 | 1,056 lines across 14 files | Not loaded until the agent's own `Read` tool fetches a specific one — see `references/prompt-modules.md` |
+| `SKILL.md` size (the always-loaded file)                       | 276 lines / 15,897 bytes    | `wc -l -c SKILL.md`                                                                                      |
+| All `references/*.md` combined                                 | 1,150 lines across 15 files | Not loaded until the agent's own `Read` tool fetches a specific one — see `references/prompt-modules.md` |
 | `npm run typecheck` (full repo, 60 `.ts`/`.tsx` files)         | ~2.7s                       | `time npm run typecheck`                                                                                 |
 | `npm run lint`                                                 | ~1.9s                       | `time npm run lint`                                                                                      |
 | `npm run plugins:smoke` (tsc rebuild + 35 real assertions)     | ~2.2s                       | `time npm run plugins:smoke`                                                                             |
