@@ -49,7 +49,7 @@ tractability — **one showcase per PR**, each with real captured
 screenshots (`showcase/<name>/`), not a batch:
 
 - Better landing pages (done: `showcase/landing-page/`)
-- Better dashboards
+- Better dashboards (done: `showcase/dashboard/`)
 - Better SaaS apps
 - Better design systems
 - Better component modernization

@@ -158,24 +158,28 @@ compatibility, and filesystem-based discovery. It's exercised end to end by
 marketplace — see `plugins/README.md` for exactly what it does and doesn't
 do before describing it to a user.
 
-## Reference workflow example
+## Reference workflow examples
 
-`examples/ai-saas-landing/` is a complete, worked run of this workflow end to end
-(requirements → design rationale → tokens → motion decisions → accessibility
-review → performance notes → implementation) for a fictional AI SaaS landing
-page. Read its `README.md` as the model for how much reasoning a real build
-should show, not just its code.
+`examples/ai-saas-landing/` and `examples/analytics-dashboard/` are
+complete, worked runs of this workflow end to end (requirements → design
+rationale → tokens → motion decisions → accessibility review → performance
+notes → implementation) for a fictional AI SaaS marketing page and its own
+internal analytics dashboard, respectively — deliberately the sharpest
+contrast this skill's own taxonomy draws (persuasive/single-theme vs.
+dense/dark-mode-first/low-motion). Read either `README.md` as the model for
+how much reasoning a real build should show, not just its code.
 
 `examples/gallery/` has seven shorter, narrated walkthroughs (Prompt →
 Expected workflow → Generated artifacts → Explanation) covering other
-request shapes — dashboard, component modernization, design critique, motion
+request shapes — component modernization, design critique, motion
 enhancement, design system generation, and repository analysis — without
 duplicating a full codebase per scenario; see its `README.md` for why.
 
 `showcase/` has real, rendered before/after screenshots (desktop/tablet/
-mobile) for the same kind of comparison, when seeing the difference matters
-more than reading about it — a fully isolated pipeline, never a dependency
-of this skill's own tooling; see its `README.md`.
+mobile, plus dark mode where relevant) for the same kind of comparison,
+when seeing the difference matters more than reading about it — a fully
+isolated pipeline, never a dependency of this skill's own tooling; see its
+`README.md`.
 
 ## Contributing to this skill
 

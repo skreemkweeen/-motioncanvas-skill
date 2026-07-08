@@ -1,5 +1,13 @@
 # Walkthrough: dashboard
 
+> **This scenario has a full, real reference build now**: `examples/analytics-dashboard/`
+> (an internal API dashboard called "Pulse") and its before/after screenshots in
+> `showcase/dashboard/`. The walkthrough below is kept as the original
+> planning-trace reasoning for a generic dashboard request — read
+> `examples/analytics-dashboard/README.md` for the actual, fully-worked
+> decisions (design rationale, tokens, motion, accessibility, performance)
+> behind a specific implementation.
+
 ## Prompt
 
 > "We need a dashboard showing our SaaS's usage metrics — active users,
