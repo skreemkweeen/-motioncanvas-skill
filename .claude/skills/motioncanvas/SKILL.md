@@ -113,6 +113,9 @@ register the result instead of picking one candidate and copying it.
 - `references/api-reference.md` — every exported symbol across `snippets/`,
   `providers/`, `plugins/`, `commands/`, `tokens/`, and `analysis/`,
   classified Public/Internal/Interface-only.
+- `references/release-audit.md` — the v1.0 stability/performance/workflow
+  validation results, and a per-capability Implemented/Interface-only/Future
+  work classification.
 - `analysis/` — the `ProjectProfile` type/README for the repo-intelligence
   stage, and the `CreativeBrief` type/doc for the intent stage.
 - `plugins/` — the plugin runtime wrapping design-source providers (21st.dev,
