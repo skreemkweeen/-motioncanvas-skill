@@ -32,6 +32,10 @@ export interface RegisteredComponentMetadata {
   darkModeSupport: boolean;
   respectsReducedMotion: boolean;
   accessibilityNotes?: string;
+  /** Short, copy-pasteable usage snippet — how a caller actually renders this component. */
+  usageExample?: string;
+  /** Anything else worth recording: known limitations, a link to a longer doc, etc. */
+  documentationNotes?: string;
 }
 
 export interface ComponentQuery {
