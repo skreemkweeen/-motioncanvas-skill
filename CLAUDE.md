@@ -37,6 +37,12 @@ before committing changes to any `.ts`/`.tsx` file in this repo.
 - `.claude/skills/motioncanvas/examples/ai-saas-landing/` — one complete,
   worked run of the SKILL.md workflow end to end, meant as the model for how
   much reasoning a real build should show, not just its code.
+- `.claude/skills/motioncanvas/analysis/` — the `ProjectProfile` type and
+  README for the repo-intelligence workflow stage (filled in by reading the
+  target repo, not an automated scanner).
+
+See `references/architecture.md` for a diagram of how these fit together,
+and `CONTRIBUTING.md` for the contributor-facing setup/rules.
 
 ## Editing this skill
 

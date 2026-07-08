@@ -16,26 +16,39 @@ components — never copy external code or assets verbatim.
 
 ## Workflow
 
-Run through these steps in order, scaling depth to the size of the ask. A single
-button doesn't need a wireframe phase; a new dashboard does.
+Run through these stages in order, scaling depth to the size of the ask. A single
+button doesn't need a wireframe phase; a new dashboard does. Each stage name below
+is the one used consistently across this skill's docs (`analysis/`, `references/`)
+— see `references/architecture.md` for the same pipeline as a diagram.
 
-1. **Clarify intent** — what is this UI for, who uses it, what's the one thing it
-   must communicate first. If the request is vague ("build me an AI app"), ask one
-   or two concrete questions (audience, core action, reference product) before
-   generating anything.
-2. **Read the repo first** (see below) — never guess at conventions that are one
-   `grep` away.
-3. **Plan the structure** — layout/grid, content hierarchy, states (empty/loading/
-   error/success), responsive breakpoints.
-4. **Pick the design tokens** — reuse existing ones; only introduce new
-   spacing/type/color values if none exist yet (see `references/design-system.md`).
-5. **Pick motion** — only where it clarifies state change or hierarchy (see
+1. **Intent + requirements** — what is this UI for, who uses it, what's the one
+   thing it must communicate first. If the request is vague ("build me an AI
+   app"), ask one or two concrete questions (audience, core action, reference
+   product) before generating anything.
+2. **Research** — read the target repo first (`analysis/README.md`); for
+   inspiration on patterns, see `references/providers.md`. Never guess at a
+   convention that's one `grep` away.
+3. **Planning + layout** — structure, grid, content hierarchy, states
+   (empty/loading/error/success), responsive breakpoints.
+4. **Design system** — pick tokens; reuse what the target repo already has, only
+   introduce new spacing/type/color values if none exist yet (see
+   `references/design-system.md` and `snippets/tokens.css`).
+5. **Components** — smallest reasonable set, composed from what the repo already
+   has or Shadcn/Radix primitives before reaching for a new dependency (see
+   Component sourcing order below).
+6. **Motion** — only where it clarifies state change or hierarchy (see
    `references/motion-principles.md`). Default to none over gratuitous.
-6. **Build** — smallest reasonable set of components, composed from what the repo
-   already has or Shadcn/Radix primitives before reaching for a new dependency.
-7. **Self-review** against `references/quality-checklist.md` before handing back.
-   Fix anything that fails; note anything intentionally deferred (e.g. "didn't add
-   Playwright coverage — say the word if you want it").
+7. **Accessibility + performance + review** — run the self-review pass
+   (`references/review-pipeline.md`, backed by `references/quality-checklist.md`)
+   before handing back. Fix anything that fails; note anything intentionally
+   deferred (e.g. "didn't add Playwright coverage — say the word if you want it").
+8. **Code + documentation** — the implementation plus whatever documentation is
+   proportional to the change (see Output expectations below) — not a fixed
+   checklist run on every request regardless of size.
+
+If the request is to evaluate an _existing_ UI rather than build something new,
+switch to `references/design-critique-mode.md` instead of this pipeline — it's
+review-only, no code changes unless asked.
 
 ## Repo intelligence
 
@@ -55,6 +68,13 @@ Before writing new UI code, check:
 Never duplicate something that already exists in the codebase in a working form.
 Extend or compose it.
 
+For anything beyond a single small component, formalize the above into a
+`ProjectProfile` (`analysis/project-profile.ts`) before generating code —
+`analysis/README.md` maps each field to the tool call that answers it. This
+isn't an automated scanner; it's the same repo-reading above, written down so
+downstream decisions (which library to reuse, which naming to follow) trace
+back to something actually observed instead of an assumption.
+
 ## Component sourcing order
 
 1. An existing component/pattern already in this repo.
@@ -72,11 +92,22 @@ Prefer the earliest option that satisfies the requirement.
   approach, layout/grid defaults.
 - `references/motion-principles.md` — easing/spring defaults, staggering,
   scroll-linked reveals, reduced-motion handling, when _not_ to animate.
-- `references/quality-checklist.md` — the self-review pass: visual hierarchy,
-  accessibility, performance, responsive/dark-mode correctness.
+- `references/quality-checklist.md` — the detailed self-review criteria: visual
+  hierarchy, accessibility, performance, responsive/dark-mode correctness.
+- `references/review-pipeline.md` — the same criteria organized into seven named
+  review lenses (Creative Director, UX Architect, Motion Director, React
+  Architect, Accessibility Auditor, Performance Engineer, Code Reviewer) run in
+  sequence, with the expected output shape for each.
+- `references/design-critique-mode.md` — the review-only mode for evaluating an
+  existing UI instead of building a new one.
 - `references/providers.md` — how to draw on external design ecosystems
   (Aceternity, Magic UI, Origin UI, HeroUI, Shadcn, Framer/Spline/Rive, LottieFiles)
   without live-fetching or copying assets.
+- `references/architecture.md` — a diagram of how all of the above fit together.
+- `references/extending.md` — how to add a new motion primitive, provider, or
+  reference example to this skill.
+- `analysis/` — the `ProjectProfile` type and README for the repo-intelligence
+  stage.
 
 ## Reusable motion code
 
@@ -97,6 +128,10 @@ into the target project and adapt names/tokens rather than reinventing per reque
   `AnimatedBorder`, `FloatingCard`, `CursorGlow`, `AuroraBackground`, plus shared
   `tokens.ts`) built on the same provider/hooks above. See `motion/README.md` for
   what each one is for and when _not_ to reach for it.
+- `tokens.css` — a starter stylesheet (color/typography/spacing/radius/elevation/
+  shadow/semantic-color CSS custom properties, light + dark) for the design-system
+  stage when a target project doesn't already have one. Extend the project's
+  existing tokens instead if it does — see `references/design-system.md`.
 
 ## Provider architecture
 
@@ -118,14 +153,13 @@ should show, not just its code.
 
 ## Contributing to this skill
 
-The repo root has a `package.json`/`tsconfig.json`/`eslint.config.js` scoped to
-`snippets/`, `providers/`, and `examples/` — `npm install`, then `npm run
-typecheck` and `npm run lint` before adding or editing anything in those
-directories. There's no test framework here on purpose: this is a reference
-library copied into other projects, not a published package with its own runtime
-behavior to unit-test: typecheck + lint is the meaningful bar. Add real tests
-if that stops being true (e.g. a primitive gains non-trivial logic worth
-asserting on in isolation).
+See the repo root's `CONTRIBUTING.md` for setup and rules, and
+`references/extending.md` for step-by-step instructions on adding a new
+motion primitive, provider, or reference example. There's no test framework
+here on purpose: this is a reference library copied into other projects, not
+a published package with its own runtime behavior to unit-test — typecheck +
+lint is the meaningful bar. Add real tests if that stops being true (e.g. a
+primitive gains non-trivial logic worth asserting on in isolation).
 
 ## Output expectations
 
