@@ -21,10 +21,13 @@ button doesn't need a wireframe phase; a new dashboard does. Each stage name bel
 is the one used consistently across this skill's docs (`analysis/`, `references/`)
 — see `references/architecture.md` for the same pipeline as a diagram.
 
-1. **Intent + requirements** — what is this UI for, who uses it, what's the one
-   thing it must communicate first. If the request is vague ("build me an AI
-   app"), ask one or two concrete questions (audience, core action, reference
-   product) before generating anything.
+1. **Intent + requirements** — classify the request against
+   `references/intent-taxonomy.md`'s eleven categories to get concrete
+   defaults instead of generic instinct, then fill in a creative brief
+   (`analysis/creative-brief.ts`) for anything beyond a single component. If
+   the request is vague ("build me an AI app"), ask one or two concrete
+   questions (audience, core action, reference product) before generating
+   anything.
 2. **Research** — read the target repo first (`analysis/README.md`); for
    inspiration on patterns, see `references/providers.md`. Never guess at a
    convention that's one `grep` away.
@@ -37,7 +40,8 @@ is the one used consistently across this skill's docs (`analysis/`, `references/
    has or Shadcn/Radix primitives before reaching for a new dependency (see
    Component sourcing order below).
 6. **Motion** — only where it clarifies state change or hierarchy (see
-   `references/motion-principles.md`). Default to none over gratuitous.
+   `references/motion-principles.md`); pick and apply a preset consistently
+   per `references/motion-director.md`. Default to none over gratuitous.
 7. **Accessibility + performance + review** — run the self-review pass
    (`references/review-pipeline.md`, backed by `references/quality-checklist.md`)
    before handing back. Fix anything that fails; note anything intentionally
@@ -52,28 +56,13 @@ review-only, no code changes unless asked.
 
 ## Repo intelligence
 
-Before writing new UI code, check:
-
-- `tailwind.config.*` / `app/globals.css` — existing tokens (colors, spacing, radii,
-  font scale). Extend these; don't invent a parallel system.
-- `components/ui/**` or equivalent — Shadcn/Radix primitives already installed.
-  Compose from them instead of rebuilding a button/dialog/dropdown from scratch.
-- `package.json` — which motion/3D libraries are already a dependency
-  (`framer-motion`, `motion`, `gsap`, `@react-three/fiber`, `lenis`, ...). Use what's
-  there; don't add a second animation library that does the same job.
-- Existing component naming/file layout conventions — match them.
-- `prefers-reduced-motion` handling already present in the app (a provider, a hook)
-  — hook into it rather than adding a competing one.
-
-Never duplicate something that already exists in the codebase in a working form.
-Extend or compose it.
-
-For anything beyond a single small component, formalize the above into a
+Before writing new UI code, check the target repo's existing tokens,
+installed component/motion libraries, naming conventions, and
+`prefers-reduced-motion` handling — never invent a parallel system or
+duplicate something that already works in the codebase; extend or compose
+it. For anything beyond a single small component, formalize this into a
 `ProjectProfile` (`analysis/project-profile.ts`) before generating code —
-`analysis/README.md` maps each field to the tool call that answers it. This
-isn't an automated scanner; it's the same repo-reading above, written down so
-downstream decisions (which library to reuse, which naming to follow) trace
-back to something actually observed instead of an assumption.
+`analysis/README.md` maps each field to the exact tool call that answers it.
 
 ## Component sourcing order
 
@@ -84,14 +73,25 @@ back to something actually observed instead of an assumption.
 4. Custom-built from scratch, following `references/design-system.md` and
    `references/motion-principles.md`.
 
-Prefer the earliest option that satisfies the requirement.
+Prefer the earliest option that satisfies the requirement. When step 3 turns
+up more than one usable candidate, see `references/component-composition.md`
+for how to evaluate, merge, normalize, and (if the project tracks one)
+register the result instead of picking one candidate and copying it.
 
 ## Reference material
 
+- `references/intent-taxonomy.md` — the eleven request categories and where
+  to find each one's defaults (`analysis/intent-taxonomy.ts`).
+- `references/component-composition.md` — evaluating, merging, and
+  normalizing multiple component candidates instead of picking one and
+  copying it.
 - `references/design-system.md` — type scale, spacing scale, color/dark-mode
   approach, layout/grid defaults.
 - `references/motion-principles.md` — easing/spring defaults, staggering,
   scroll-linked reveals, reduced-motion handling, when _not_ to animate.
+- `references/motion-director.md` — preset selection and per-interaction-
+  category guidance (page transitions, scroll choreography, hero sequences,
+  micro-interactions, loading states, hover, gesture).
 - `references/quality-checklist.md` — the detailed self-review criteria: visual
   hierarchy, accessibility, performance, responsive/dark-mode correctness.
 - `references/review-pipeline.md` — the same criteria organized into seven named
@@ -110,8 +110,8 @@ Prefer the earliest option that satisfies the requirement.
   loaded "module" already, and why there's no separate runtime for that.
 - `references/roadmap.md` — what's built vs. planned, and why the next phase
   should mostly use this architecture rather than keep expanding it.
-- `analysis/` — the `ProjectProfile` type and README for the repo-intelligence
-  stage.
+- `analysis/` — the `ProjectProfile` type/README for the repo-intelligence
+  stage, and the `CreativeBrief` type/doc for the intent stage.
 - `plugins/` — the plugin runtime wrapping design-source providers (21st.dev,
   Figma, Spline, ...); see `plugins/README.md`.
 - `commands/` — a metadata catalog of this skill's own workflow entry points,
@@ -121,30 +121,15 @@ Prefer the earliest option that satisfies the requirement.
 
 ## Reusable motion code
 
-`snippets/` has drop-in, dependency-light building blocks — copy the relevant one
-into the target project and adapt names/tokens rather than reinventing per request:
-
-- `motion-provider.tsx` — `LazyMotion` + reduced-motion context, so every animated
-  component in a project shares one source of truth for "should this animate".
-- `use-magnetic-button.ts` — pointer-follow magnetic hover with a spring, respecting
-  reduced motion.
-- `use-premium-scroll.ts` — scroll-linked reveal hook built on Framer Motion's
-  `useScroll`/`useTransform` (no extra dependency), with a GSAP `ScrollTrigger`
-  variant commented alongside for projects that already depend on GSAP.
-- `button.example.tsx` — a worked example composing the above into one component,
-  as a reference for the bar to hit (states, focus ring, reduced motion, memoized).
-- `motion/` — a twelve-primitive library (`Fade`, `Slide`, `Reveal`,
-  `StaggerContainer`/`StaggerItem`, `ScrollReveal`, `HeroReveal`, `SpotlightFollow`,
-  `AnimatedBorder`, `FloatingCard`, `CursorGlow`, `AuroraBackground`, plus shared
-  `tokens.ts`) built on the same provider/hooks above. See `motion/README.md` for
-  what each one is for and when _not_ to reach for it.
-- `tokens.css` — a starter stylesheet (color/typography/spacing/radius/elevation/
-  shadow/semantic-color CSS custom properties, light + dark) for the design-system
-  stage when a target project doesn't already have one. Extend the project's
-  existing tokens instead if it does — see `references/design-system.md`.
-  Generated (along with `design-tokens.ts`, `tokens.json`, and
-  `tailwind-theme-extension.ts`) from `tokens/design-tokens.ts`'s single
-  source of truth — see `tokens/README.md`.
+`snippets/` has drop-in, dependency-light building blocks — copy the relevant
+file into the target project and adapt names/tokens rather than reinventing
+per request. `motion-provider.tsx`, `use-magnetic-button.ts`,
+`use-premium-scroll.ts`, and `button.example.tsx` are the base layer;
+`motion/` is a twelve-primitive library plus eight presets built on top of
+them (see `motion/README.md`); `tokens.css`/`design-tokens.ts`/`tokens.json`/
+`tailwind-theme-extension.ts` are generated from `tokens/design-tokens.ts`
+(see `tokens/README.md`). Each file's own doc comment covers what it's for
+and when _not_ to reach for it — this list is just so you know they exist.
 
 ## Provider architecture
 
