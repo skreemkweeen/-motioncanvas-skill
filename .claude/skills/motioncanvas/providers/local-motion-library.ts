@@ -10,7 +10,7 @@ import type {
   MotionLibraryProvider,
   MotionPrimitiveMetadata,
   MotionQuery,
-} from "./motion-library-provider";
+} from "./motion-library-provider.js";
 
 const catalog: readonly MotionPrimitiveMetadata[] = [
   {

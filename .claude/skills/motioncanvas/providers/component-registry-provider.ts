@@ -5,7 +5,7 @@
  * in-memory implementation of this interface.
  */
 
-import type { Provider } from "./types";
+import type { Provider } from "./types.js";
 
 export type ComponentCategory =
   | "button"

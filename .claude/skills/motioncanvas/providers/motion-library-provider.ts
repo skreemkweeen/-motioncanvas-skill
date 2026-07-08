@@ -7,7 +7,7 @@
  * the actual primitives shipped in snippets/motion/.
  */
 
-import type { Provider } from "./types";
+import type { Provider } from "./types.js";
 
 export interface MotionPrimitiveMetadata {
   id: string;
