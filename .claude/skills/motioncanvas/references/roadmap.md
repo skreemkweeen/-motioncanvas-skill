@@ -22,7 +22,7 @@ for what's actually built today.
   CSS/Tailwind/TypeScript/JSON.
 - A command-registry catalog (`commands/`) with a drift validator.
 
-## Next: output quality, not more architecture
+## Next: MotionCanvas Showcase, not more architecture
 
 v1.0's architecture (provider/plugin layer, token compiler, review pipeline,
 repo intelligence) is considered complete. Future work should improve the
@@ -32,9 +32,23 @@ developer receives?** If not, don't build it — that includes new
 providers, registries, hooks, contexts, config files, or reference
 documentation that doesn't accompany a concrete output-quality improvement.
 
-Priority areas, roughly in order of tractability:
+The product framing for this phase: visitors don't adopt a skill because
+they read its architecture docs — they adopt it because they can see a
+concrete before/after and judge the difference themselves. `showcase/`
+(added alongside this phase) is that visual proof, and it's also a real
+verification step, not just documentation — rendering
+`showcase/landing-page/`'s "after" side for the first time surfaced three
+shipped bugs (a Tailwind key-casing mismatch, a component that silently
+ignored its own documented usage, and invisible CTA text) that
+`typecheck`/`lint` had no way to catch. Expect building each future
+showcase to keep finding real issues, which is exactly why they're built
+one at a time and reviewed for real, not generated in bulk to hit a count.
 
-- Better landing pages
+Priority areas for new showcases and capability work, roughly in order of
+tractability — **one showcase per PR**, each with real captured
+screenshots (`showcase/<name>/`), not a batch:
+
+- Better landing pages (done: `showcase/landing-page/`)
 - Better dashboards
 - Better SaaS apps
 - Better design systems
@@ -49,13 +63,14 @@ change produces noticeably better output — see `examples/gallery/` for the
 existing before/after-shaped walkthroughs to extend, `examples/ai-saas-landing/`
 for the level of reasoning a real before/after comparison should show, and
 `showcase/` for real rendered screenshots when a code-level comparison
-alone doesn't make the difference legible. Building a showcase is also a
-real verification step, not just documentation — rendering
-`showcase/landing-page/`'s "after" side for the first time surfaced three
-shipped bugs (a Tailwind key-casing mismatch, a component that silently
-ignored its own documented usage, and invisible CTA text) that
-`typecheck`/`lint` had no way to catch. Expect building future showcases to
-keep finding real issues, not just illustrate known-good output.
+alone doesn't make the difference legible.
+
+A large template/component library (many verticals, many pre-built
+sections) is explicitly **not** how this phase should proceed: building
+many at once, to a genuine quality bar, each with a real captured
+screenshot, isn't credible in one or two PRs — it's the fastest way back to
+shallow, rushed output, the opposite of this phase's point. One showcase,
+reviewed and bug-checked for real, beats ten generated to hit a count.
 
 Two specific, previously-listed ideas stay in scope under this framing
 because they're genuinely about output quality, not new infrastructure:
