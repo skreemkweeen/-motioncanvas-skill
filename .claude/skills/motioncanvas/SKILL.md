@@ -166,6 +166,12 @@ review → performance notes → implementation) for a fictional AI SaaS landing
 page. Read its `README.md` as the model for how much reasoning a real build
 should show, not just its code.
 
+`examples/gallery/` has seven shorter, narrated walkthroughs (Prompt →
+Expected workflow → Generated artifacts → Explanation) covering other
+request shapes — dashboard, component modernization, design critique, motion
+enhancement, design system generation, and repository analysis — without
+duplicating a full codebase per scenario; see its `README.md` for why.
+
 ## Contributing to this skill
 
 See the repo root's `CONTRIBUTING.md` for setup and rules, and
