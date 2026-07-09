@@ -1,19 +1,14 @@
 /**
- * A real, dependency-free inline SVG bar chart — not a charting library
- * dependency, and not a placeholder image. Deliberately simple (one
- * series, no zoom/tooltip interaction) since a full charting library is a
- * genuine target-project decision (data volume, interactivity needs) this
- * skill shouldn't make on a project's behalf; see references/roadmap.md's
- * "no unjustified new dependencies" rule.
- *
- * Accessibility: a chart's visual bars convey no information to a screen
- * reader, so the underlying data ships as a real, visually-hidden table —
- * not just an `aria-label` summary, which can't express point-by-point
- * values.
+ * Extracted from examples/analytics-dashboard/sparkline-chart.tsx —
+ * already fully generic, moved here as-is. A real, dependency-free inline
+ * SVG bar chart — not a charting library dependency, and not a
+ * placeholder image; see references/roadmap.md's "no unjustified new
+ * dependencies" rule. Ships a real, visually-hidden data table alongside
+ * the SVG, since a chart's pixels convey no information to a screen
+ * reader and an `aria-label` summary can't express point-by-point values.
  */
 export interface SparklineChartProps {
   title: string;
-  /** Point labels, e.g. day-of-week or hour. */
   labels: readonly string[];
   values: readonly number[];
 }

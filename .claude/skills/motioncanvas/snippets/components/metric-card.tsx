@@ -1,3 +1,8 @@
+/**
+ * Extracted from examples/analytics-dashboard/metric-card.tsx — already
+ * fully generic (no product-specific copy), moved here as-is so future
+ * showcases reuse it instead of rebuilding it.
+ */
 import type { SVGProps } from "react";
 
 export interface MetricCardProps {

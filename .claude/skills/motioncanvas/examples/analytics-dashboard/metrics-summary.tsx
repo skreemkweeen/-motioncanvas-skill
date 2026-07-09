@@ -1,5 +1,5 @@
 import { Fade } from "../../snippets/motion/fade";
-import { MetricCard } from "./metric-card";
+import { MetricCard } from "../../snippets/components/metric-card";
 
 interface Metric {
   label: string;

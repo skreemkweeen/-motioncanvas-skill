@@ -1,10 +1,10 @@
 import { MotionProvider } from "../../snippets/motion-provider";
+import { SparklineChart } from "../../snippets/components/sparkline-chart";
 import { Sidebar } from "./sidebar";
 import { Topbar } from "./topbar";
 import { FilterBar } from "./filter-bar";
 import { MetricsSummary } from "./metrics-summary";
-import { SparklineChart } from "./sparkline-chart";
-import { DataTable, type EndpointRow } from "./data-table";
+import { EndpointsTable, type EndpointRow } from "./data-table";
 
 export const metadata = {
   title: "Pulse — Overview",
@@ -47,7 +47,7 @@ export default function AnalyticsDashboardPage() {
             <MetricsSummary />
             <div className="grid gap-6 lg:grid-cols-3">
               <div className="lg:col-span-2">
-                <DataTable state="data" rows={endpoints} />
+                <EndpointsTable state="data" rows={endpoints} />
               </div>
               <SparklineChart
                 title="Requests (last 24h)"

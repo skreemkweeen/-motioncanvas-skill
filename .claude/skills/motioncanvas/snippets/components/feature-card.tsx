@@ -1,4 +1,8 @@
-import { SpotlightFollow } from "../../snippets/motion/spotlight-follow";
+/**
+ * Extracted from examples/ai-saas-landing/feature-card.tsx — already fully
+ * generic (no product-specific copy), moved here as-is.
+ */
+import { SpotlightFollow } from "../motion/spotlight-follow";
 
 export interface FeatureCardProps {
   title: string;
@@ -6,12 +10,6 @@ export interface FeatureCardProps {
   className?: string;
 }
 
-/**
- * The reusable pattern for any "N things this product does" grid — composes
- * SpotlightFollow so every card in a grid shares the same hover affordance
- * without repeating the wiring. Copy this file, not the inline markup, when
- * building a similar section elsewhere in the same product.
- */
 export function FeatureCard({ title, description, className }: FeatureCardProps) {
   return (
     <SpotlightFollow
