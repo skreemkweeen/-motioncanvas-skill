@@ -11,3 +11,4 @@ export * from "./animated-border";
 export * from "./floating-card";
 export * from "./cursor-glow";
 export * from "./aurora-background";
+export * from "./no-js-guard";

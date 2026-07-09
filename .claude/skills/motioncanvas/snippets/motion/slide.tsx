@@ -5,6 +5,9 @@
  * when the user prefers reduced motion (no translate).
  *
  * Requires <MotionProvider> ancestor (../motion-provider).
+ *
+ * Marked `data-motion-reveal` so it degrades to visible instead of stuck
+ * hidden when JavaScript never runs — see `./no-js.css`.
  */
 
 import type { ReactNode } from "react";
@@ -44,6 +47,7 @@ export function Slide({
 
   return (
     <m.div
+      data-motion-reveal
       initial={{ opacity: 0, x: offset.x, y: offset.y }}
       animate={{ opacity: 1, x: 0, y: 0 }}
       exit={{ opacity: 0, x: offset.x, y: offset.y }}

@@ -104,6 +104,15 @@ Against `references/quality-checklist.md`:
   point at `#demo`, which now resolves to the CTA section's `id="demo"` —
   checked for real, not assumed, since a dangling anchor is an easy thing to
   ship unnoticed.
+- §1's "must work with JavaScript disabled" constraint: `Hero`'s
+  `HeroReveal` is built from `StaggerContainer`/`StaggerItem`
+  (`snippets/motion/stagger-container.tsx`), which mark their elements
+  `data-motion-reveal` precisely so this holds — but that only degrades
+  correctly once the target project's root layout (not part of this
+  example, which is a route `page.tsx` rather than the app shell) imports
+  `snippets/motion/no-js.css` globally and renders `<NoJsGuardScript />`
+  (`snippets/motion/no-js-guard.tsx`) as `<head>`'s first child. See
+  `snippets/motion/README.md`'s "Progressive enhancement" section.
 - Not yet verified: real contrast measurement against final theme tokens,
   since this pass uses `neutral-950`/`white` as placeholders for whatever
   the target project's actual dark-hero tokens are. Flagging this rather

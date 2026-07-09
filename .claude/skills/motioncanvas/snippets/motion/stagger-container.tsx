@@ -10,6 +10,12 @@
  * between container and item.
  *
  * Requires <MotionProvider> ancestor (../motion-provider).
+ *
+ * `StaggerItem` is marked `data-motion-reveal` so it degrades to visible
+ * instead of stuck hidden when JavaScript never runs — see `./no-js.css`.
+ * `StaggerContainer` itself needs no marker: its own "hidden" variant is an
+ * empty object (only `StaggerItem`'s variant carries the actual opacity/
+ * offset), so the container never renders a hidden inline style of its own.
  */
 
 import type { ReactNode } from "react";
@@ -82,6 +88,7 @@ export function StaggerItem({
 
   return (
     <m.div
+      data-motion-reveal
       variants={{
         hidden: { opacity: 0, x: offset.x, y: offset.y },
         visible: {

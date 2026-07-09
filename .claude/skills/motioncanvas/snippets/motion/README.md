@@ -10,6 +10,12 @@ All components except `AuroraBackground` and `SpotlightFollow` require a
 `LazyMotion` feature bundle those components render into (`m.*`), and the
 shared reduced-motion flag.
 
+The entrance/reveal primitives (`Fade`, `Slide`, `Reveal`, `ScrollReveal`,
+`StaggerItem`, `HeroReveal`) also need two more pieces wired up for their
+content to degrade gracefully with JavaScript disabled — see
+[Progressive enhancement (no-JS safety)](#progressive-enhancement-no-js-safety)
+below.
+
 ## Tokens (`tokens.ts`)
 
 Shared duration/ease/spring/distance/stagger constants. Import these into any
@@ -40,6 +46,40 @@ you used.
   <h2>Section heading</h2>
 </Reveal>
 ```
+
+## Progressive enhancement (no-JS safety)
+
+Framer Motion computes each entrance primitive's starting style (`initial`,
+or a `style` prop driven by a MotionValue, as in `ScrollReveal`)
+synchronously — including during SSR — so the server-rendered HTML already
+has `opacity: 0` baked in as an inline style. If JavaScript never runs
+(disabled, blocked, or fails to load), hydration never happens,
+`whileInView`/`animate` never fires, and that content stays invisible
+forever. `Fade`, `Slide`, `Reveal`, `ScrollReveal`, and `StaggerItem` (and
+anything built from them, e.g. `HeroReveal`) each mark their wrapping
+element `data-motion-reveal` for exactly this reason.
+
+That marker only does something once two more pieces are wired up in the
+target project:
+
+1. Import `./no-js.css` once, globally (e.g. alongside `../tokens.css` in
+   `app/globals.css`).
+2. Render `<NoJsGuardScript />` (`./no-js-guard.tsx`) as the first child of
+   `<head>` in the root layout.
+
+Together they mean: JS running → `<html class="js">` gets set before the
+document finishes parsing, motion behaves normally; JS never running →
+`<html>` never gets that class, and `no-js.css`'s
+`html:not(.js) [data-motion-reveal]` rule forces the marked elements
+visible instead of permanently hidden. Reduced-motion handling is
+unaffected either way — it's a separate, JS-only concern.
+
+`scripts/validate-motion-safety.mjs` (repo root) is a heuristic regression
+check: it scans this directory for a literal `opacity: 0` without a
+`data-motion-reveal` marker in the same file, so a future primitive can't
+silently reintroduce this bug the way `StaggerContainer`/`Reveal`
+originally did. It can't catch MotionValue-driven cases like
+`ScrollReveal`'s — those need a human to notice.
 
 ## Staggering (`stagger-container.tsx`)
 

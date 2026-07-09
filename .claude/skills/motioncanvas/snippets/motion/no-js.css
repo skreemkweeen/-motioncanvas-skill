@@ -1,0 +1,31 @@
+/**
+ * Progressive-enhancement safety net for the entrance/reveal primitives in
+ * this directory (Fade, Slide, Reveal, ScrollReveal, StaggerContainer/
+ * StaggerItem, and anything built from them, e.g. HeroReveal).
+ *
+ * Framer Motion computes each primitive's `initial`/mount-time style
+ * synchronously — including during SSR — so the server-rendered HTML
+ * already has `opacity: 0` (and sometimes a transform) baked in as an
+ * inline style. If JavaScript never runs (disabled, blocked, or fails to
+ * load), hydration never happens, `whileInView`/`animate` never fires, and
+ * that content stays invisible forever — the opposite of progressive
+ * enhancement.
+ *
+ * Fix: every such primitive marks its wrapping element `data-motion-reveal`,
+ * and `no-js-guard.tsx`'s inline script adds a `js` class to <html> as early
+ * as possible, before the rest of the document parses. Until that class
+ * exists, this rule forces marked elements visible. The `!important` here
+ * is load-bearing: an `!important` stylesheet declaration outranks any
+ * non-!important inline style regardless of specificity or source order,
+ * which is what lets a plain CSS rule override Framer Motion's inline
+ * opacity/transform.
+ *
+ * Import this file once, globally, wherever the target project already
+ * loads global CSS (e.g. `app/globals.css`), alongside `../tokens.css` if
+ * that's in use too. Pair with `<NoJsGuardScript />` (`./no-js-guard.tsx`)
+ * rendered as the first child of <head> in the root layout.
+ */
+html:not(.js) [data-motion-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}

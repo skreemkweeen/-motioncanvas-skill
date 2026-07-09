@@ -7,6 +7,13 @@
  * to drive more than one motion value off the same scroll progress.
  *
  * Requires <MotionProvider> ancestor (../motion-provider).
+ *
+ * Marked `data-motion-reveal` so it degrades to visible instead of stuck
+ * hidden when JavaScript never runs — see `./no-js.css`. Note this one's
+ * starting `opacity: 0` comes from `usePremiumScroll`'s MotionValue, not a
+ * literal in this file, so `scripts/validate-motion-safety.mjs`'s text scan
+ * can't catch its absence the way it can for Fade/Slide/Reveal — the marker
+ * here was added by hand, not caught by the check.
  */
 
 import type { ReactNode } from "react";
@@ -23,7 +30,13 @@ export function ScrollReveal({ children, className, ...props }: ScrollRevealProp
   const { ref, opacity, y } = usePremiumScroll<HTMLDivElement>();
 
   return (
-    <m.div ref={ref} style={{ opacity, y }} className={className} {...props}>
+    <m.div
+      ref={ref}
+      data-motion-reveal
+      style={{ opacity, y }}
+      className={className}
+      {...props}
+    >
       {children}
     </m.div>
   );
