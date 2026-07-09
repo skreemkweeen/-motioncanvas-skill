@@ -15,6 +15,7 @@
     ".claude/skills/motioncanvas/snippets/**/*.tsx",
     ".claude/skills/motioncanvas/providers/**/*.ts",
     ".claude/skills/motioncanvas/examples/**/*.ts",
-    ".claude/skills/motioncanvas/examples/**/*.tsx"
+    ".claude/skills/motioncanvas/examples/**/*.tsx",
+    ".claude/skills/motioncanvas/analysis/**/*.ts"
   ]
 }

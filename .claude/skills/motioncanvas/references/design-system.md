@@ -38,7 +38,10 @@ typically lands at 96–128px vertical, 24–48px horizontal gutters.
 - Define semantic tokens (`background`, `foreground`, `muted`, `border`,
   `primary`, `destructive`, ...) as CSS variables in `:root` and a `.dark`
   (or `[data-theme="dark"]`) override — components reference the semantic
-  token, never a raw hex.
+  token, never a raw hex. `snippets/tokens.css` is a starter set of these
+  (plus typography/spacing/radius/elevation) to copy in when a target
+  project has none yet — extend the project's existing tokens instead if it
+  already has them.
 - Contrast: body text ≥ 4.5:1 against its background, large/display text ≥ 3:1.
   Check both themes, not just light.
 - Accent color used sparingly — one primary action color per view. If

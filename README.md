@@ -21,8 +21,12 @@ use it directly in a Claude Code session opened on this repo.
   interfaces with no live integration shipped
 - [`examples/ai-saas-landing/`](.claude/skills/motioncanvas/examples/ai-saas-landing) —
   one complete reference build walked through the full skill workflow
+- [`analysis/`](.claude/skills/motioncanvas/analysis) — the `ProjectProfile`
+  type for the repo-intelligence workflow stage
+- [`references/architecture.md`](.claude/skills/motioncanvas/references/architecture.md) —
+  a diagram of how all of the above fit together
 
 ## Contributing
 
-`npm install`, then `npm run typecheck` / `npm run lint` / `npm run format`
-before committing changes to any TypeScript under `.claude/skills/motioncanvas/`.
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) — short version: `npm install`, then
+`npm run typecheck` / `npm run lint` / `npm run format` before committing.
