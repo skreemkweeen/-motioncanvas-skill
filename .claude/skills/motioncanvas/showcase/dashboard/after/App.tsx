@@ -8,9 +8,9 @@ import { Sidebar } from "../../../examples/analytics-dashboard/sidebar";
 import { Topbar } from "../../../examples/analytics-dashboard/topbar";
 import { FilterBar } from "../../../examples/analytics-dashboard/filter-bar";
 import { MetricsSummary } from "../../../examples/analytics-dashboard/metrics-summary";
-import { SparklineChart } from "../../../examples/analytics-dashboard/sparkline-chart";
+import { SparklineChart } from "../../../snippets/components/sparkline-chart";
 import {
-  DataTable,
+  EndpointsTable,
   type EndpointRow,
 } from "../../../examples/analytics-dashboard/data-table";
 
@@ -50,7 +50,7 @@ export function App() {
             <MetricsSummary />
             <div className="grid gap-6 lg:grid-cols-3">
               <div className="lg:col-span-2">
-                <DataTable state="data" rows={endpoints} />
+                <EndpointsTable state="data" rows={endpoints} />
               </div>
               <SparklineChart
                 title="Requests (last 24h)"
