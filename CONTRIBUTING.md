@@ -1,9 +1,12 @@
 # Contributing
 
-This repo ships one Claude Code Skill (`.claude/skills/motioncanvas/`) — a
-reference kit of instructions, docs, and copy-in code, not an app. There's
-nothing to build or deploy; the bar for a change is that it typechecks,
-lints, and stays honest about what actually works.
+This repo ships a family of Claude Code Skills: six short, strict,
+installable skills (`motioncanvas-core`/`-dashboard`/`-landing`/`-review`/
+`-motion`/`-design-system`) plus the shared reference library they draw on
+(`.claude/skills/motioncanvas/`) — a reference kit of instructions, docs,
+and copy-in code, not an app. There's nothing to build or deploy; the bar
+for a change is that it typechecks, lints, and stays honest about what
+actually works.
 
 ## Setup
 
@@ -29,7 +32,12 @@ Prettier's fixes if `format` fails.
 See `CLAUDE.md` for the full layout, or `references/architecture.md` for a
 diagram. Short version:
 
-- `SKILL.md` — the entry point; keep it skimmable.
+- `.claude/skills/motioncanvas-*/SKILL.md` — the six installable, strict
+  skills; keep each under 150 lines, gate sequence and forbidden patterns
+  stated directly, not descriptive prose.
+- `.claude/commands/*.md` — the six matching slash commands; keep each
+  under 80 lines.
+- `SKILL.md` (shared library) — the entry point; keep it skimmable.
 - `references/` — long-form guidance (design system, motion principles,
   review pipeline, extension guide, this list continues in the file itself).
 - `snippets/` — real, working React/TypeScript to copy into a target project,
@@ -44,7 +52,8 @@ diagram. Short version:
 - `tokens/` — the design-token compiler (single source of truth); see
   `tokens/README.md`.
 - `examples/` — complete, narrated reference builds.
-- `analysis/` — the `ProjectProfile` type for the repo-intelligence step.
+- `analysis/` — the `ProjectProfile`, `CreativeBrief`, and `VisualIdentity`
+  types for the repo-intelligence, intent, and visual-identity gates.
 - `showcase/` — a fully isolated (own `package.json`/tooling, never a
   dependency of the commands above) before/after screenshot pipeline; see
   `showcase/README.md`.
@@ -67,13 +76,21 @@ motion primitive, provider, or reference example.
 - **No breaking changes to existing exported names/types** without a
   migration note in the PR description; prefer additive (new optional
   fields, new files) over rewriting what's there.
-- **Post-v1.0, no new infrastructure.** Before proposing a PR, ask: does
-  this directly improve the UI a developer receives from this skill? If
-  not — a new provider, registry, hook, context, config file, or reference
-  doc not attached to a concrete output-quality improvement — don't build
-  it. See `references/roadmap.md`'s "Next: output quality, not more
-  architecture" for the current priority areas, each of which requires a
-  before/after example in the PR, not just an assertion of improvement.
+- **Post-v1.0, no new infrastructure that doesn't change what a developer
+  receives.** Before proposing a PR, ask: does this directly improve the UI
+  a developer receives from this skill, or whether the existing gates
+  actually get applied to it? If neither — a new provider, registry, hook,
+  context, config file, or reference doc not attached to either — don't
+  build it. The skill-family split (six installable skills + slash
+  commands + `VisualIdentity`/`visual-identity-engine.md`) passed this bar
+  despite adding files: it was fixing a real enforcement gap (a single long
+  `SKILL.md` being read as documentation instead of applied), not expanding
+  scope for its own sake — see `references/roadmap.md`'s "Skill family
+  split" section. New files alone aren't disqualifying; new files that
+  don't change enforcement or output are. See `references/roadmap.md`'s
+  "Next: output quality, not more architecture" for the current priority
+  areas, each of which requires a before/after example in the PR, not just
+  an assertion of improvement.
 
 ## Commit style
 
