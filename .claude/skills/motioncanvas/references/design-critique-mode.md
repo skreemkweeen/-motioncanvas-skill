@@ -18,16 +18,28 @@ actually run the app, the rendered UI) — not a guess from the component
 name. Read the real files before writing findings.
 
 - **Hierarchy** — is the focal point of each screen/section unambiguous.
-- **Spacing** — consistent with a scale, or one-off values scattered around.
+- **Spacing/whitespace** — consistent with a scale, or one-off values
+  scattered around; is negative space used deliberately around the most
+  important element, or spread evenly with no emphasis.
 - **Typography** — scale, line-height, line-length; see `design-system.md`.
+- **Color usage** — semantic tokens vs. raw hex scattered through the code;
+  contrast against `quality-checklist.md`'s AA thresholds in both themes if
+  the project has dark mode; accent color used sparingly (one primary
+  action color per view) rather than everything competing for attention.
 - **Responsiveness** — behavior at the breakpoints actually in use, not just
   desktop and one mobile width.
 - **Accessibility** — semantic HTML, keyboard operability, contrast, ARIA;
   see `quality-checklist.md`'s Accessibility section.
-- **Motion** — does it clarify state/hierarchy or just decorate; is
-  `prefers-reduced-motion` respected; see `motion-principles.md`.
+- **Motion/animation quality** — does it clarify state/hierarchy or just
+  decorate; is `prefers-reduced-motion` respected; are durations/easing
+  consistent with one preset (`motion-director.md`) or scattered ad hoc; see
+  `motion-principles.md`.
 - **Interaction quality** — hover/focus/active/disabled/loading states
   actually present and distinguishable.
+- **Performance** — `quality-checklist.md`'s Performance section: motion
+  animating transform/opacity only, heavy dependencies code-split, no
+  obvious layout-shift sources. Only report a number (bundle size, LCP) if
+  a real tool was actually run to get it.
 - **Maintainability** — duplicated patterns that should be one component,
   unjustified `any`, naming inconsistent with the rest of the repo.
 
@@ -37,7 +49,18 @@ existing code instead of new code, it isn't a separate standard.
 
 ## Output format
 
-A findings list, most severe first:
+A findings list, grouped by priority, most severe group first:
+
+- **Blocking** — breaks the UI for some real set of users (keyboard traps,
+  missed contrast on body text, layout that doesn't work at a breakpoint
+  actually in use).
+- **High** — a real but non-blocking problem (inconsistent motion timing,
+  a missing loading state, a semantic-HTML gap ARIA is papering over).
+- **Medium** — a polish gap a careful team would fix before shipping but
+  that doesn't break anything (spacing drift, an unclear focal point).
+- **Low** — a nitpick worth naming but not worth blocking on.
+
+Within each group, every finding gets:
 
 - **Location** — file/component (and line, if applicable).
 - **What's wrong** — concrete, not vague ("the CTA button has no
@@ -45,6 +68,9 @@ A findings list, most severe first:
 - **Why it matters** — the concrete failure scenario ("a keyboard user
   tabbing through the form can't see which field is focused").
 - **Suggested fix** — one line; a full diff only if asked.
+
+Skip empty priority groups rather than listing "None" — most reviews won't
+have a Blocking section, and that's a fine outcome to report as-is.
 
 ## What this mode does not do
 

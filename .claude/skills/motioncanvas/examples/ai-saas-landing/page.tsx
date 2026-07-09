@@ -1,4 +1,5 @@
 import { MotionProvider } from "../../snippets/motion-provider";
+import { Nav } from "./nav";
 import { Hero } from "./hero";
 import { Features } from "./features";
 import { Cta } from "./cta";
@@ -16,6 +17,7 @@ export const metadata = {
 export default function AiSaasLandingPage() {
   return (
     <MotionProvider>
+      <Nav />
       <main>
         <Hero />
         <Features />

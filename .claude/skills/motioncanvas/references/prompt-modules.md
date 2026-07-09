@@ -30,20 +30,40 @@ Each reference file below is a "module": self-contained, loaded only when
 its stage/situation is relevant, sized to be worth its own file rather than
 a paragraph inline in `SKILL.md`.
 
-| Module                               | Loaded when                                 | Roughly   |
-| ------------------------------------ | ------------------------------------------- | --------- |
-| `analysis/README.md`                 | Repo-intelligence stage, non-trivial builds | ~40 lines |
-| `references/design-system.md`        | Design-system stage                         | ~70 lines |
-| `references/motion-principles.md`    | Motion stage                                | ~95 lines |
-| `references/quality-checklist.md`    | Self-review stage                           | ~65 lines |
-| `references/review-pipeline.md`      | Self-review stage (the 7-lens structure)    | ~60 lines |
-| `references/design-critique-mode.md` | Review-only requests                        | ~60 lines |
-| `references/providers.md`            | Sourcing inspiration/patterns               | ~55 lines |
-| `references/architecture.md`         | Understanding how the skill fits together   | ~70 lines |
-| `references/extending.md`            | Adding a new primitive/provider/example     | ~50 lines |
-| `providers/README.md`                | Adding or understanding a provider          | ~50 lines |
-| `plugins/README.md`                  | Adding or understanding a plugin            | ~50 lines |
-| `snippets/motion/README.md`          | Choosing a motion primitive                 | ~90 lines |
+| Module                                | Loaded when                                 | Roughly    |
+| ------------------------------------- | ------------------------------------------- | ---------- |
+| `references/intent-taxonomy.md`       | Intent stage, every non-trivial build       | ~50 lines  |
+| `analysis/creative-brief.md`          | Intent stage, every non-trivial build       | ~35 lines  |
+| `analysis/README.md`                  | Repo-intelligence stage, non-trivial builds | ~40 lines  |
+| `references/component-composition.md` | Multiple component candidates found         | ~55 lines  |
+| `references/design-system.md`         | Design-system stage                         | ~70 lines  |
+| `references/motion-principles.md`     | Motion stage                                | ~95 lines  |
+| `references/motion-director.md`       | Motion stage, picking a preset              | ~75 lines  |
+| `references/quality-checklist.md`     | Self-review stage                           | ~65 lines  |
+| `references/review-pipeline.md`       | Self-review stage (the 7-lens structure)    | ~60 lines  |
+| `references/design-critique-mode.md`  | Review-only requests                        | ~75 lines  |
+| `references/providers.md`             | Sourcing inspiration/patterns               | ~55 lines  |
+| `references/architecture.md`          | Understanding how the skill fits together   | ~85 lines  |
+| `references/extending.md`             | Adding a new primitive/provider/example     | ~50 lines  |
+| `providers/README.md`                 | Adding or understanding a provider          | ~50 lines  |
+| `plugins/README.md`                   | Adding or understanding a plugin            | ~50 lines  |
+| `snippets/motion/README.md`           | Choosing a motion primitive                 | ~100 lines |
+
+## Keeping SKILL.md itself small
+
+`SKILL.md` is the one file with no "only when relevant" — it loads on every
+invocation, so its size is the actual, unavoidable prompt-context cost of
+this skill existing at all. Concretely: when this pass added pointers to
+four new reference docs (`intent-taxonomy.md`, `component-composition.md`,
+`motion-director.md`, plus the plugin-system section from the prior PR),
+`SKILL.md` grew — so the "Repo intelligence" and "Reusable motion code"
+sections were cut back to short pointers, moving detail that already lived
+in `analysis/README.md` and each snippet file's own doc comment out of the
+always-loaded file rather than leaving it duplicated in both places. Net
+effect: `SKILL.md` went from 218 lines to 188 despite four new capabilities
+gaining a pointer. Treat every future addition to `SKILL.md` the same way —
+a new pointer is fine, restating detail that belongs in the linked file is
+the thing to cut instead.
 
 ## If this ever changes
 

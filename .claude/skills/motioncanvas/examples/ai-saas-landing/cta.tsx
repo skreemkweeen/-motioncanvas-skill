@@ -4,7 +4,7 @@ import { PremiumButton } from "../../snippets/button.example";
 
 export function Cta() {
   return (
-    <section className="mx-auto max-w-3xl px-6 py-24 text-center">
+    <section id="demo" className="mx-auto max-w-3xl px-6 py-24 text-center">
       <Reveal>
         <AnimatedBorder borderRadius={20} background="var(--background, #0a0a0a)">
           <div className="px-8 py-12">
