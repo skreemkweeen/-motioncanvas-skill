@@ -8,6 +8,7 @@
 
 import { forwardRef, type ButtonHTMLAttributes, type SVGProps } from "react";
 import { m } from "framer-motion";
+import { useMotionPreferences } from "./motion-provider";
 import { useMagneticButton } from "./use-magnetic-button";
 
 function cn(...classes: Array<string | false | null | undefined>) {
@@ -36,6 +37,7 @@ export const PremiumButton = forwardRef<HTMLButtonElement, PremiumButtonProps>(
       strength: 0.3,
       radius: 60,
     });
+    const { reducedMotion } = useMotionPreferences();
 
     return (
       <m.button
@@ -49,7 +51,7 @@ export const PremiumButton = forwardRef<HTMLButtonElement, PremiumButtonProps>(
         onPointerLeave={onPointerLeave}
         disabled={disabled || loading}
         aria-busy={loading || undefined}
-        whileTap={{ scale: 0.97 }}
+        whileTap={reducedMotion ? undefined : { scale: 0.97 }}
         className={cn(
           "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3",
           "bg-primary text-sm font-medium text-primary-foreground",
