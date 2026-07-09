@@ -83,6 +83,7 @@ have a Blocking section, and that's a fine outcome to report as-is.
 
 ## After the critique
 
-If the user asks for fixes, switch to the normal build workflow
-(`SKILL.md`'s Workflow section), treating each accepted finding as a
-requirement, and run `review-pipeline.md` on the fix before handing back.
+If the user asks for fixes, switch to the normal build gate sequence (the
+`motioncanvas-*` skill matching the surface being fixed — e.g.
+`motioncanvas-dashboard` for a dashboard), treating each accepted finding as
+a requirement, and run `review-pipeline.md` on the fix before handing back.

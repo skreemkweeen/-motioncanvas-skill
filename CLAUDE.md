@@ -1,12 +1,19 @@
 # -motioncanvas-skill
 
-This repo holds a single Claude Code Skill: **motioncanvas**, at
-`.claude/skills/motioncanvas/`. It's not an app — there's nothing to deploy or
-serve here. It's a packaged skill (instructions + reference docs + reusable
-motion snippets + a small provider abstraction + one worked reference example)
-that other Claude Code sessions load when working on React/Next.js UI, to push
-toward more deliberate, motion-appropriate, accessible output instead of
-generic default UI.
+This repo holds a family of Claude Code Skills. `.claude/skills/motioncanvas/`
+is the shared reference library (instructions + reference docs + reusable
+motion snippets + a small provider abstraction + worked reference examples) —
+not typically triggered directly. Six installable skills
+(`motioncanvas-core`, `motioncanvas-dashboard`, `motioncanvas-landing`,
+`motioncanvas-review`, `motioncanvas-motion`, `motioncanvas-design-system`),
+each a single `SKILL.md` under 150 lines, draw on that library to enforce a
+strict, gate-driven workflow — real `ProjectProfile`/`CreativeBrief`/
+`VisualIdentity`/`ComponentPlan`/`MotionPlan`/`DesignCritique` artifacts and
+an explicit originality score against `references/visual-identity-engine.md`,
+rather than being read as reference documentation and defaulting to the same
+generic shape anyway. Six matching slash commands live at
+`.claude/commands/*.md` for explicit invocation. It's not an app — there's
+nothing to deploy or serve here.
 
 The root `package.json`/`tsconfig.json`/`eslint.config.js` exist purely to
 type-check and lint the TypeScript under `.claude/skills/motioncanvas/` — run
@@ -19,8 +26,21 @@ token artifacts) — see `CONTRIBUTING.md`.
 
 ## Layout
 
-- `.claude/skills/motioncanvas/SKILL.md` — the skill definition: when it
-  triggers, the workflow it follows, and pointers to the rest.
+- `.claude/skills/motioncanvas-core/`, `-dashboard/`, `-landing/`,
+  `-review/`, `-motion/`, `-design-system/` — the six installable skills,
+  each a single `SKILL.md` under 150 lines stating a mandatory gate
+  sequence (ProjectProfile → CreativeBrief → VisualIdentity → ComponentPlan
+  → MotionPlan → implementation → DesignCritique, scoped per skill) and
+  forbidden default patterns. These are what a request should actually
+  trigger; they draw on everything below rather than duplicating it.
+- `.claude/commands/*.md` — the six matching slash commands (`/motioncanvas`,
+  `/dashboard`, `/landing`, `/review-ui`, `/motion`, `/design-system`), each
+  under 80 lines, explicitly invoking the matching skill and restating its
+  gate sequence and forbidden patterns so they're visible without opening a
+  reference doc.
+- `.claude/skills/motioncanvas/SKILL.md` — the shared library's entry
+  point: component sourcing order and pointers to everything below. Not
+  typically triggered directly — see its own frontmatter.
 - `.claude/skills/motioncanvas/references/` — design system defaults, motion
   principles, a self-review checklist, and how to draw on external design
   ecosystems (Aceternity, Magic UI, Shadcn, etc.) without live-fetching
@@ -53,9 +73,14 @@ validate:registry`) — see `commands/README.md`.
 - `.claude/skills/motioncanvas/examples/ai-saas-landing/` — one complete,
   worked run of the SKILL.md workflow end to end, meant as the model for how
   much reasoning a real build should show, not just its code.
-- `.claude/skills/motioncanvas/analysis/` — the `ProjectProfile` type and
-  README for the repo-intelligence workflow stage (filled in by reading the
-  target repo, not an automated scanner).
+- `.claude/skills/motioncanvas/analysis/` — the `ProjectProfile`,
+  `CreativeBrief`, and `VisualIdentity` types (+ docs) for the
+  repo-intelligence, intent, and visual-identity gates — filled in by the
+  agent's own reading/judgment, not an automated scanner.
+- `.claude/skills/motioncanvas/references/visual-identity-engine.md` — the
+  anti-generic rules, originality scoring rubric, visual DNA/concept
+  generation, AI cliché detection, and known-generic-pattern list every
+  installable skill's VisualIdentity gate is checked against.
 - `.claude/skills/motioncanvas/showcase/` — a real before/after screenshot
   pipeline (Playwright + esbuild + Tailwind), fully isolated: its own
   `package.json`/`node_modules`, excluded from the root `tsconfig.json`/
@@ -65,10 +90,17 @@ validate:registry`) — see `commands/README.md`.
 See `references/architecture.md` for a diagram of how these fit together,
 and `CONTRIBUTING.md` for the contributor-facing setup/rules.
 
-## Editing this skill
+## Editing this skill family
 
-- Keep `SKILL.md` the entry point — it should stay skimmable; move anything
-  long-form into `references/`.
+- Keep every `SKILL.md` short — the shared library's under 150 lines, and
+  each of the six installable skills' under 150 lines too; move anything
+  long-form into `references/`. Keep every `.claude/commands/*.md` under 80
+  lines.
+- A `motioncanvas-*` skill states its mandatory gate sequence and forbidden
+  patterns directly — it is not a documentation index. Don't let a new
+  skill regress into descriptive prose; if it needs long-form explanation,
+  that explanation belongs in `references/`, with the skill file just
+  naming the gate and pointing there.
 - Snippets should stay dependency-light (Framer Motion + optional GSAP
   comment, no extra libraries) and framework-agnostic within
   React/Next.js — don't hard-code a specific target project's tokens/paths.
@@ -77,12 +109,17 @@ and `CONTRIBUTING.md` for the contributor-facing setup/rules.
   runtime; see `references/providers.md` and `providers/README.md` for how
   those are meant to be used instead.
 - Any new file under `snippets/`, `providers/`, `plugins/`, `commands/`,
-  `tokens/`, or `examples/` must pass `npm run typecheck` and `npm run lint`
-  (strict TypeScript, no `any` escape hatches without reason) before it's
-  committed. If it's meant to actually run (a plugin, a compiler), extend
-  `npm run plugins:smoke` / `tokens:build` / `validate:registry` (or add a
-  new script following that pattern) so it's genuinely exercised, not just
-  typechecked.
+  `tokens/`, `analysis/`, or `examples/` must pass `npm run typecheck` and
+  `npm run lint` (strict TypeScript, no `any` escape hatches without
+  reason) before it's committed. If it's meant to actually run (a plugin, a
+  compiler) or is a typed data table an agent consults (an `analysis/*.ts`
+  artifact), extend `npm run plugins:smoke` / `tokens:build` /
+  `validate:registry` (or add a new script following that pattern) so it's
+  genuinely exercised, not just typechecked.
 - Don't add a provider implementation that fakes a live integration — an
   interface with no backing implementation is more honest than a stub that
   returns empty arrays and claims to work.
+- Don't claim a numeric quality/originality score came from a tool that
+  didn't run — `VisualIdentity.originalityScore` is documented agent
+  judgment against `references/visual-identity-engine.md`'s rubric, not a
+  measured metric; keep that distinction explicit anywhere it's mentioned.

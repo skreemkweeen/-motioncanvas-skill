@@ -92,10 +92,12 @@ piecemeal by a target project (the project consumes their _output_, i.e.
 ## `analysis/` — Public
 
 `ProjectProfile` and `summarizeProjectProfile()` (`project-profile.ts`),
-`CreativeBrief` and `summarizeCreativeBrief()` (`creative-brief.ts`), and
+`CreativeBrief` and `summarizeCreativeBrief()` (`creative-brief.ts`),
+`VisualIdentity`/`summarizeVisualIdentity()`/`KNOWN_GENERIC_PATTERNS`
+(`visual-identity.ts`), and
 `IntentCategory`/`IntentCategoryId`/`MotionPresetRecommendation`/
 `INTENT_CATEGORIES` (`intent-taxonomy.ts`) are all Public — data shapes and
-rendering helpers meant to be filled in and consulted directly as part of the
-workflow's Intent and Research stages (see `SKILL.md`'s Workflow section).
-None of these scan or classify automatically; see each file's own doc
-comment for exactly what fills them in.
+rendering helpers meant to be filled in and consulted directly as part of
+each `motioncanvas-*` skill's mandatory gate sequence. None of these scan or
+classify automatically; see each file's own doc comment for exactly what
+fills them in.

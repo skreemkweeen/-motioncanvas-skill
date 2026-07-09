@@ -22,6 +22,33 @@ for what's actually built today.
   CSS/Tailwind/TypeScript/JSON.
 - A command-registry catalog (`commands/`) with a drift validator.
 
+## Skill family split (built)
+
+A real problem, not a hypothetical one: a single long `SKILL.md` was being
+read as reference documentation rather than applied as an opinionated,
+enforced workflow — the gates existed in prose, but nothing made skipping
+one visible before code was returned. This phase's justification is
+enforcement/adoption, not scope expansion, so it passes the "does this
+directly improve the UI a developer receives" test below despite adding new
+files: it changes whether the existing quality gates actually get applied,
+not what they cover.
+
+- Six short, strict, installable skills
+  (`motioncanvas-core`/`-dashboard`/`-landing`/`-review`/`-motion`/
+  `-design-system`, each under 150 lines) replace relying on one long
+  `SKILL.md` being read start to finish. `.claude/skills/motioncanvas/`
+  itself became the shared library those six draw on, not a seventh
+  competing entry point.
+- Six matching slash commands (`.claude/commands/*.md`, each under 80
+  lines) for explicit invocation, restating the gate sequence and forbidden
+  patterns inline rather than requiring a reference-doc detour.
+- A `VisualIdentity` gate (`analysis/visual-identity.ts`,
+  `references/visual-identity-engine.md`) with a real originality-scoring
+  rubric, a checkable `KNOWN_GENERIC_PATTERNS` list, and required
+  concept/visual-DNA generation before layout — the mechanism that actually
+  forbids the sidebar+card+purple-dashboard/centered-hero+gradient-blob
+  defaults, rather than asking nicely for originality in prose.
+
 ## Next: MotionCanvas Showcase, not more architecture
 
 v1.0's architecture (provider/plugin layer, token compiler, review pipeline,

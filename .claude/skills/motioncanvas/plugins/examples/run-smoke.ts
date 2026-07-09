@@ -29,6 +29,10 @@ import motionCatalogPlugin, {
 import { summarizeProjectProfile } from "../../analysis/project-profile.js";
 import { summarizeCreativeBrief } from "../../analysis/creative-brief.js";
 import { INTENT_CATEGORIES } from "../../analysis/intent-taxonomy.js";
+import {
+  summarizeVisualIdentity,
+  KNOWN_GENERIC_PATTERNS,
+} from "../../analysis/visual-identity.js";
 import type { RegisteredComponentMetadata } from "../../providers/component-registry-provider.js";
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
@@ -359,6 +363,50 @@ async function main(): Promise<void> {
   assert(
     INTENT_CATEGORIES.every((category) => category.coreFeatures.length > 0),
     "every INTENT_CATEGORIES entry documents at least one core feature",
+  );
+
+  // --- visual identity: summarizer output + generic-pattern table ---------
+  const identitySummary = summarizeVisualIdentity({
+    concept: "A calm, high-trust tool for people who are stressed when they open it",
+    differentiator:
+      "Confirms every action in plain language instead of icon-only controls",
+    colorDirection:
+      "One warm accent reserved for the primary action, everything else neutral",
+    typographicVoice:
+      "A humanist sans for warmth over a geometric one for technical precision",
+    layoutMetaphor: "A single calm timeline instead of a dense multi-panel dashboard",
+    motionPersonality: "Restrained and confident, no ambient loops",
+    signatureElement: "Action confirmations read as a sentence, not a toast icon",
+    rejectedGenericPatterns: ["sidebar-card-purple-dashboard"],
+    originalityScore: 8,
+    originalityRationale:
+      "Signature confirmation pattern is specific to this product's anxiety-reducing goal",
+  });
+  assert(
+    identitySummary.includes(
+      "Concept: A calm, high-trust tool for people who are stressed when they open it",
+    ),
+    "summarizeVisualIdentity renders the concept line",
+  );
+  assert(
+    identitySummary.includes("Originality score: 8/10"),
+    "summarizeVisualIdentity renders the originality score",
+  );
+
+  assert(
+    KNOWN_GENERIC_PATTERNS.length > 0,
+    "KNOWN_GENERIC_PATTERNS has at least one entry",
+  );
+  const genericPatternIds = new Set(KNOWN_GENERIC_PATTERNS.map((pattern) => pattern.id));
+  assert(
+    genericPatternIds.size === KNOWN_GENERIC_PATTERNS.length,
+    "every KNOWN_GENERIC_PATTERNS entry has a unique id",
+  );
+  assert(
+    KNOWN_GENERIC_PATTERNS.every(
+      (pattern) => pattern.whyItsGeneric.length > 0 && pattern.insteadTry.length > 0,
+    ),
+    "every KNOWN_GENERIC_PATTERNS entry explains why it's generic and what to try instead",
   );
 
   if (failures > 0) {
