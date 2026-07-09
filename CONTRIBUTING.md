@@ -9,13 +9,20 @@ lints, and stays honest about what actually works.
 
 ```
 npm install
-npm run typecheck   # tsc --noEmit over snippets/, providers/, examples/
-npm run lint        # ESLint (typescript-eslint + react-hooks)
-npm run format      # prettier --check
+npm run typecheck        # tsc --noEmit over snippets/, providers/, plugins/, commands/, tokens/, examples/, analysis/
+npm run lint              # ESLint (typescript-eslint + react-hooks)
+npm run format             # prettier --check
+npm run plugins:smoke      # actually runs the plugin runtime (not just typechecked)
+npm run validate:registry  # checks commands/registry.ts's references for drift
+npm run tokens:build       # regenerates snippets/tokens.css and friends from tokens/design-tokens.ts
 ```
 
-Run all three before opening a PR. `npm run format:write` applies Prettier's
-fixes if `format` fails.
+Run `typecheck`/`lint`/`format` before every PR. Run `plugins:smoke` after
+touching anything under `plugins/` or the providers it wraps; run
+`validate:registry` after touching `commands/registry.ts` or anything it
+references; run `tokens:build` after editing `tokens/design-tokens.ts` and
+commit the regenerated files alongside it. `npm run format:write` applies
+Prettier's fixes if `format` fails.
 
 ## Where things go
 
@@ -25,10 +32,17 @@ diagram. Short version:
 - `SKILL.md` — the entry point; keep it skimmable.
 - `references/` — long-form guidance (design system, motion principles,
   review pipeline, extension guide, this list continues in the file itself).
-- `snippets/` — real, working React/TypeScript to copy into a target project.
-- `providers/` — the interface layer for pluggable sources; most are
-  interfaces only, see `providers/README.md` for which have real
-  implementations.
+- `snippets/` — real, working React/TypeScript to copy into a target project,
+  including `motion/presets.ts`'s eight curated motion presets and the
+  generated design-token files (`tokens.css`, `design-tokens.ts`, ...).
+- `providers/` — the interface layer for pluggable sources; most have real
+  implementations scoped honestly, see `providers/README.md` for which and how.
+- `plugins/` — the real, executed plugin runtime wrapping providers; see
+  `plugins/README.md`.
+- `commands/` — the workflow-entry-point metadata catalog; see
+  `commands/README.md`.
+- `tokens/` — the design-token compiler (single source of truth); see
+  `tokens/README.md`.
 - `examples/` — complete, narrated reference builds.
 - `analysis/` — the `ProjectProfile` type for the repo-intelligence step.
 

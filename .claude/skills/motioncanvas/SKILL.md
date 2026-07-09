@@ -106,8 +106,18 @@ Prefer the earliest option that satisfies the requirement.
 - `references/architecture.md` — a diagram of how all of the above fit together.
 - `references/extending.md` — how to add a new motion primitive, provider, or
   reference example to this skill.
+- `references/prompt-modules.md` — why each reference file above is a lazily-
+  loaded "module" already, and why there's no separate runtime for that.
+- `references/roadmap.md` — what's built vs. planned, and why the next phase
+  should mostly use this architecture rather than keep expanding it.
 - `analysis/` — the `ProjectProfile` type and README for the repo-intelligence
   stage.
+- `plugins/` — the plugin runtime wrapping design-source providers (21st.dev,
+  Figma, Spline, ...); see `plugins/README.md`.
+- `commands/` — a metadata catalog of this skill's own workflow entry points,
+  with a drift validator; see `commands/README.md`.
+- `tokens/` — the design-token compiler (single source of truth → CSS/
+  Tailwind/TypeScript/JSON); see `tokens/README.md`.
 
 ## Reusable motion code
 
@@ -132,16 +142,30 @@ into the target project and adapt names/tokens rather than reinventing per reque
   shadow/semantic-color CSS custom properties, light + dark) for the design-system
   stage when a target project doesn't already have one. Extend the project's
   existing tokens instead if it does — see `references/design-system.md`.
+  Generated (along with `design-tokens.ts`, `tokens.json`, and
+  `tailwind-theme-extension.ts`) from `tokens/design-tokens.ts`'s single
+  source of truth — see `tokens/README.md`.
 
 ## Provider architecture
 
 `providers/` decouples "where does inspiration/component metadata/motion catalog
 data/templates/assets come from" from this workflow, so a new source can be added
-without editing this file. `ComponentRegistryProvider` and `MotionLibraryProvider`
-have real local implementations; `DesignInspirationProvider`, `TemplateProvider`,
-and `AssetProvider` are interfaces only — there is no live integration with any
-external service shipped here. See `providers/README.md` before claiming this
-skill can search/score/fetch from a named external source; it can't, yet.
+without editing this file. `ComponentRegistryProvider`, `MotionLibraryProvider`,
+`DesignInspirationProvider` (a local-JSON pattern for 21st.dev/Magic UI/
+Aceternity UI, plus a real Figma REST API client), and `AssetProvider` (real
+local `.splinecode` file resolution) all have real implementations, scoped
+honestly — see `providers/README.md` for exactly what each one can and can't
+do before claiming this skill can search/score/fetch from a named external
+source. `TemplateProvider` remains interface-only.
+
+## Plugin system
+
+`plugins/` wraps providers in a small, real, in-process plugin runtime —
+registration, config validation, dependency resolution, version
+compatibility, and filesystem-based discovery. It's exercised end to end by
+`npm run plugins:smoke`, not just typechecked. It is not a sandbox or a
+marketplace — see `plugins/README.md` for exactly what it does and doesn't
+do before describing it to a user.
 
 ## Reference workflow example
 

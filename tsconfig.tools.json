@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "noEmit": false,
+    "declaration": false,
+    "rootDir": ".claude/skills/motioncanvas",
+    "outDir": "dist-tools"
+  },
+  "include": [
+    ".claude/skills/motioncanvas/plugins/**/*.ts",
+    ".claude/skills/motioncanvas/commands/**/*.ts",
+    ".claude/skills/motioncanvas/tokens/**/*.ts",
+    ".claude/skills/motioncanvas/providers/types.ts",
+    ".claude/skills/motioncanvas/providers/design-inspiration-provider.ts",
+    ".claude/skills/motioncanvas/providers/asset-provider.ts",
+    ".claude/skills/motioncanvas/providers/local-json-design-inspiration-provider.ts",
+    ".claude/skills/motioncanvas/providers/figma-design-inspiration-provider.ts",
+    ".claude/skills/motioncanvas/providers/spline-asset-provider.ts",
+    ".claude/skills/motioncanvas/providers/mock-design-inspiration-provider.ts"
+  ]
+}

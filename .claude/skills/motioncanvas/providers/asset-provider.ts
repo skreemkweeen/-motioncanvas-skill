@@ -8,7 +8,7 @@
  * instead (see references/providers.md).
  */
 
-import type { Provider } from "./types";
+import type { Provider } from "./types.js";
 
 export type AssetKind = "spline-scene" | "rive-file" | "lottie-json" | "image" | "video";
 

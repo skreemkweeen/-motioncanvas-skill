@@ -1,0 +1,1 @@
+This is a placeholder fixture file for the plugin smoke test, not a real Spline export. It exists only so spline-asset-provider.ts's search()/resolve() have a real file on disk to find.

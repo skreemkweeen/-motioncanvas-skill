@@ -7,7 +7,7 @@
  * how "inspiration" is handled without live access.
  */
 
-import type { Provider } from "./types";
+import type { Provider } from "./types.js";
 
 export interface DesignInspirationQuery {
   category:

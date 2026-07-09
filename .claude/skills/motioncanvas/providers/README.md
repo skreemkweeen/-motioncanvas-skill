@@ -7,25 +7,30 @@ touching SKILL.md or any of the reference docs.
 
 ## Status
 
-| Provider                    | Interface                        | Real implementation           | Why                                                                                                                                        |
-| --------------------------- | -------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ComponentRegistryProvider` | `component-registry-provider.ts` | `local-component-registry.ts` | Pure bookkeeping over metadata the skill itself produces — no external dependency needed to function.                                      |
-| `MotionLibraryProvider`     | `motion-library-provider.ts`     | `local-motion-library.ts`     | A static catalog of this repo's own `snippets/motion/` primitives — real data, already known.                                              |
-| `DesignInspirationProvider` | `design-inspiration-provider.ts` | none                          | Needs a real integration with an external source (21st.dev, Mobbin, Awwwards, ...) or user-supplied data; nothing here has live access.    |
-| `TemplateProvider`          | `template-provider.ts`           | none                          | Only one reference example exists so far (`examples/ai-saas-landing/`); a provider abstraction over a single entry has no real caller yet. |
-| `AssetProvider`             | `asset-provider.ts`              | none                          | Spline/Rive/Lottie assets must be actual exported files supplied by a user — there's nothing to catalog until one exists.                  |
+| Provider                    | Interface                        | Real implementation(s)                                                                                                                                                                                                                                                               | Why                                                                                                                                                                                                            |
+| --------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ComponentRegistryProvider` | `component-registry-provider.ts` | `local-component-registry.ts`                                                                                                                                                                                                                                                        | Pure bookkeeping over metadata the skill itself produces — no external dependency needed to function.                                                                                                          |
+| `MotionLibraryProvider`     | `motion-library-provider.ts`     | `local-motion-library.ts`                                                                                                                                                                                                                                                            | A static catalog of this repo's own `snippets/motion/` primitives — real data, already known.                                                                                                                  |
+| `DesignInspirationProvider` | `design-inspiration-provider.ts` | `local-json-design-inspiration-provider.ts` (backs 21st.dev/Magic UI/Aceternity UI — a user-curated local JSON catalog, no scraping), `figma-design-inspiration-provider.ts` (real Figma REST API client, token-gated), `mock-design-inspiration-provider.ts` (explicit test double) | Real where a real integration exists (Figma's official API) or a local-data pattern is honest (a curated catalog standing in for a source with no public API) — still no live scraping of Mobbin/Awwwards/etc. |
+| `TemplateProvider`          | `template-provider.ts`           | none                                                                                                                                                                                                                                                                                 | Only one reference example exists so far (`examples/ai-saas-landing/`); a provider abstraction over a single entry has no real caller yet.                                                                     |
+| `AssetProvider`             | `asset-provider.ts`              | `spline-asset-provider.ts` (real local-file `.splinecode` listing/resolution — no network, no fabricated scenes)                                                                                                                                                                     | Real for "list/resolve files a user actually exported"; still no way to fetch or generate a scene that doesn't exist locally.                                                                                  |
 
-Two providers are genuinely functional today. The other three are contracts
-only — implementing one for real is future work, not something to fake with
-a stub that returns empty arrays and calls it done.
+Most providers are genuinely functional today, within the scope documented
+above. `TemplateProvider` remains a contract only — implementing it for real
+is future work, not something to fake with a stub that returns empty arrays
+and calls it done. See `../plugins/README.md` for how these get wired
+together with lifecycle/discovery — that's a separate concern from the
+providers themselves.
 
 ## Adding a new provider implementation
 
 1. Pick the interface it satisfies (or add a new interface file here if it's
    a genuinely new domain — follow the pattern in `types.ts`: a `Provider<TQuery,
 TResult>` base plus whatever extra methods the domain needs).
-2. Implement it in a new file, e.g. `twentyfirst-dev-provider.ts` for a real
-   21st.dev integration. It must:
+2. Implement it in a new file — e.g. `local-json-design-inspiration-provider.ts`
+   is the pattern for "no public API, so read a user-curated local catalog
+   instead," and `figma-design-inspiration-provider.ts` is the pattern for
+   "a real official API exists." It must:
    - Only return data it actually has (a real API response, a real local
      file, user-supplied content) — never fabricate results.
    - Be explicit in its own doc comment about what's live vs. cached vs.
@@ -38,10 +43,10 @@ TResult>` base plus whatever extra methods the domain needs).
 
 ## What this is not
 
-Not a plugin loader, not a dependency-injection framework, not a runtime
-registry with `configure()`/`execute()` lifecycle hooks. Those add real
-complexity that only pays off once there are several competing
-implementations of the same interface to swap between — right now there's
-at most one real implementation per interface. Reach for that machinery
-later, if it's ever actually needed, rather than building it speculatively
-now.
+Providers are data/interface contracts — not a dependency-injection
+framework and not, by themselves, a lifecycle runtime. `plugins/` is where
+`initialize()`/`configure()`/`execute()`/`dispose()` lifecycle, dependency
+resolution, and discovery actually live, wrapping a provider instance rather
+than duplicating this layer. Keep that separation: a provider should stay
+usable directly (as the smoke test's fixtures do) without requiring the
+plugin runtime to exist.
