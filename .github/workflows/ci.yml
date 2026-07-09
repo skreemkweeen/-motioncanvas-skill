@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run format
+      - run: npm run plugins:smoke
+      - run: npm run validate:registry
+
+      # tokens:build regenerates snippets/tokens.css and friends — run it and
+      # fail if that produces an uncommitted diff, catching drift between
+      # tokens/design-tokens.ts and the committed generated output.
+      - run: npm run tokens:build
+      - run: git diff --exit-code -- .claude/skills/motioncanvas/snippets

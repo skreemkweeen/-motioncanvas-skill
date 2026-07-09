@@ -110,6 +110,12 @@ register the result instead of picking one candidate and copying it.
   loaded "module" already, and why there's no separate runtime for that.
 - `references/roadmap.md` — what's built vs. planned, and why the next phase
   should mostly use this architecture rather than keep expanding it.
+- `references/api-reference.md` — every exported symbol across `snippets/`,
+  `providers/`, `plugins/`, `commands/`, `tokens/`, and `analysis/`,
+  classified Public/Internal/Interface-only.
+- `references/release-audit.md` — the v1.0 stability/performance/workflow
+  validation results, and a per-capability Implemented/Interface-only/Future
+  work classification.
 - `analysis/` — the `ProjectProfile` type/README for the repo-intelligence
   stage, and the `CreativeBrief` type/doc for the intent stage.
 - `plugins/` — the plugin runtime wrapping design-source providers (21st.dev,
@@ -160,6 +166,12 @@ review → performance notes → implementation) for a fictional AI SaaS landing
 page. Read its `README.md` as the model for how much reasoning a real build
 should show, not just its code.
 
+`examples/gallery/` has seven shorter, narrated walkthroughs (Prompt →
+Expected workflow → Generated artifacts → Explanation) covering other
+request shapes — dashboard, component modernization, design critique, motion
+enhancement, design system generation, and repository analysis — without
+duplicating a full codebase per scenario; see its `README.md` for why.
+
 ## Contributing to this skill
 
 See the repo root's `CONTRIBUTING.md` for setup and rules, and
@@ -169,6 +181,82 @@ here on purpose: this is a reference library copied into other projects, not
 a published package with its own runtime behavior to unit-test — typecheck +
 lint is the meaningful bar. Add real tests if that stops being true (e.g. a
 primitive gains non-trivial logic worth asserting on in isolation).
+
+## Execution principles
+
+These override stylistic preference — apply them to every generation, not
+just when explicitly asked.
+
+- **Design review** — before returning an implementation, check it against
+  `references/quality-checklist.md` one more time and ask: does this look
+  intentionally designed, or does anything feel repetitive, AI-generated, or
+  distracting from the user's goal? Fix obvious issues within scope before
+  handing back, rather than noting them and moving on.
+- **Simplicity first** — a single component doesn't need a provider,
+  registry, context, or config file; a full app/design-system buildout might
+  justify all four (see Provider architecture/Plugin system above). Match
+  the abstraction to the request's actual size — prefer the straightforward
+  solution over the clever one.
+- **Repository identity** — adapt to the target repo's existing visual
+  language, motion density, and conventions (see Repo intelligence above and
+  `analysis/project-profile.ts`); never redesign toward a personally
+  preferred style. This skill adapts to the repo, not the other way around.
+- **Motion philosophy** — every animation must answer why it's moving and
+  what state change it communicates (`references/motion-principles.md`'s
+  "when not to animate"); if removing it would make the interface clearer,
+  remove it.
+- **Motion budget** — calibrate intensity to the surface, independent of
+  which named preset (`references/motion-director.md`) is in use:
+
+  | Surface                                      | Intensity   |
+  | -------------------------------------------- | ----------- |
+  | Landing pages, portfolios                    | Medium–High |
+  | Marketing sites                              | Medium      |
+  | Dashboards                                   | Low         |
+  | Admin panels                                 | Very low    |
+  | Data tables, forms, authentication, settings | Minimal     |
+
+  Critical workflows (auth, destructive actions, settings) prioritize
+  clarity over spectacle every time.
+
+- **Component evolution** — reuse an existing component, then extend it,
+  then compose several, then consider replacing one, and only then build
+  something new (`references/component-composition.md` has the full search
+  → evaluate → merge → normalize → register process).
+- **Accessibility beyond compliance** — `references/quality-checklist.md`'s
+  Accessibility section is the bar; also weigh RTL, localization, and
+  variable content length when the request touches them.
+- **Performance philosophy** — measure before optimizing; prefer Server
+  Components, streaming, Suspense, lazy loading, and image optimization over
+  client-side JavaScript effects with little UX value
+  (`references/quality-checklist.md`'s Performance section).
+- **Context budget** — load only the reference docs the current stage needs
+  (`references/prompt-modules.md`) — don't read the whole `references/`
+  directory for a single-component ask.
+- **Engineering standards** — strict TypeScript, accessible, responsive,
+  dependency-light, consistent with the repo's own conventions.
+- **Repository preservation** — don't replace an existing pattern (folder
+  structure, hooks, utilities, tokens, state management, testing strategy)
+  without a clear reason; integrate rather than relocate.
+
+**Creative quality gate** — immediately before returning code, ask: would a
+senior frontend engineer approve this implementation, and would a senior
+product designer be comfortable shipping this interface? Does it feel
+intentional rather than generated? If a meaningful improvement is available
+within the requested scope, make it first.
+
+**Definition of done**:
+
+- [ ] Satisfies the request — nothing more, nothing less.
+- [ ] Strict TypeScript, no unexplained `any`.
+- [ ] Existing project conventions preserved.
+- [ ] Motion is purposeful, or deliberately absent.
+- [ ] Accessibility actually reviewed, not just typed correctly.
+- [ ] Responsive behavior considered.
+- [ ] Any new dependency is flagged, not silently added.
+- [ ] Documentation updated if the change's size warrants it (see Output
+      expectations below).
+- [ ] No more complex than the request requires.
 
 ## Output expectations
 

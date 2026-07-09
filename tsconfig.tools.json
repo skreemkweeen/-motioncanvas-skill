@@ -12,12 +12,17 @@
     ".claude/skills/motioncanvas/plugins/**/*.ts",
     ".claude/skills/motioncanvas/commands/**/*.ts",
     ".claude/skills/motioncanvas/tokens/**/*.ts",
+    ".claude/skills/motioncanvas/analysis/**/*.ts",
     ".claude/skills/motioncanvas/providers/types.ts",
     ".claude/skills/motioncanvas/providers/design-inspiration-provider.ts",
     ".claude/skills/motioncanvas/providers/asset-provider.ts",
     ".claude/skills/motioncanvas/providers/local-json-design-inspiration-provider.ts",
     ".claude/skills/motioncanvas/providers/figma-design-inspiration-provider.ts",
     ".claude/skills/motioncanvas/providers/spline-asset-provider.ts",
-    ".claude/skills/motioncanvas/providers/mock-design-inspiration-provider.ts"
+    ".claude/skills/motioncanvas/providers/mock-design-inspiration-provider.ts",
+    ".claude/skills/motioncanvas/providers/component-registry-provider.ts",
+    ".claude/skills/motioncanvas/providers/local-component-registry.ts",
+    ".claude/skills/motioncanvas/providers/motion-library-provider.ts",
+    ".claude/skills/motioncanvas/providers/local-motion-library.ts"
   ]
 }

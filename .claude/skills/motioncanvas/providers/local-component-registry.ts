@@ -13,7 +13,7 @@ import type {
   ComponentQuery,
   ComponentRegistryProvider,
   RegisteredComponentMetadata,
-} from "./component-registry-provider";
+} from "./component-registry-provider.js";
 
 export function createLocalComponentRegistry(): ComponentRegistryProvider {
   const entries = new Map<string, RegisteredComponentMetadata>();

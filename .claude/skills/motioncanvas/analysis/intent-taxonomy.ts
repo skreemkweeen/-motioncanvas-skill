@@ -8,7 +8,7 @@
  * step.
  */
 
-import type { MotionPresetName } from "../snippets/motion/presets";
+import type { MotionPresetName } from "../snippets/motion/presets.js";
 
 /**
  * Some categories don't have one preset (a design system ships tokens, not

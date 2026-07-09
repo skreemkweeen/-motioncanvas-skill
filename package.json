@@ -1,7 +1,7 @@
 {
   "name": "motioncanvas-skill",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "description": "Type-checking and linting for the motioncanvas Claude Code skill's reference snippets, providers, and examples.",
   "scripts": {

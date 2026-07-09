@@ -22,10 +22,36 @@ for what's actually built today.
   CSS/Tailwind/TypeScript/JSON.
 - A command-registry catalog (`commands/`) with a drift validator.
 
-## Next: creative capabilities, not more foundation
+## Next: output quality, not more architecture
 
-The next phase should mostly _use_ the architecture above rather than keep
-extending it. In roughly the order they'd become tractable:
+v1.0's architecture (provider/plugin layer, token compiler, review pipeline,
+repo intelligence) is considered complete. Future work should improve the
+UI this skill actually produces, not the machinery behind it. Before
+starting any future PR, ask: **does this directly improve the UI a
+developer receives?** If not, don't build it — that includes new
+providers, registries, hooks, contexts, config files, or reference
+documentation that doesn't accompany a concrete output-quality improvement.
+
+Priority areas, roughly in order of tractability:
+
+- Better landing pages
+- Better dashboards
+- Better SaaS apps
+- Better design systems
+- Better component modernization
+- Better motion
+- Better accessibility
+- Better repository-aware refactoring
+
+Every PR against one of these areas must include a concrete before/after
+example (not just an assertion of improvement) demonstrating why the
+change produces noticeably better output — see `examples/gallery/` for the
+existing before/after-shaped walkthroughs to extend, and
+`examples/ai-saas-landing/` for the level of reasoning a real before/after
+comparison should show.
+
+Two specific, previously-listed ideas stay in scope under this framing
+because they're genuinely about output quality, not new infrastructure:
 
 - **AI-powered design critique with concrete refactoring suggestions** —
   extending `design-critique-mode.md`'s findings format to propose an actual
@@ -34,26 +60,13 @@ extending it. In roughly the order they'd become tractable:
   a target project's current tokens/components (via `analysis/`) and
   proposing a mapping onto `tokens/design-tokens.ts`'s scales, rather than
   a from-scratch rebuild.
-- **Component composition from multiple sources into one implementation** —
-  e.g., combining a layout pattern from one `DesignInspirationProvider`
-  result with a motion treatment from `snippets/motion/`, with the
-  composition decision documented the way `examples/ai-saas-landing/`
-  documents its choices.
-- **Motion timeline generation for page transitions and storytelling** —
-  a genuinely new primitive category (sequencing across route changes, not
-  just within one component), which would need its own honest scoping pass
-  the way `snippets/motion/` got one.
-- **Figma import/export**, building on `figma-design-inspiration-provider.ts`
-  — that provider currently only reads component metadata via the official
-  REST API; two-way sync or file generation would be new scope, not an
-  extension of what's there, and should only be built against Figma's
-  actually-documented capabilities (see their Plugin/REST API docs), never
-  assumed.
-- **Advanced template generation** on top of the now-stable plugin/provider
-  architecture — more reference examples like `examples/ai-saas-landing/`,
-  promoted into a real `TemplateProvider` implementation once there are
-  enough to justify the abstraction (see `providers/template-provider.ts`'s
-  doc comment).
+
+Two ideas from the prior version of this roadmap are deferred, not
+abandoned, because they're new infrastructure (a primitive category, a
+provider integration) rather than an improvement to existing output:
+motion timeline generation for page transitions, and Figma import/export.
+Revisit them only if a specific before/after case can't be built without
+them.
 
 ## Explicitly not planned
 

@@ -20,6 +20,16 @@ import catalogPlugin from "./local-catalog.plugin.js";
 import aggregatorPlugin from "./aggregator.plugin.js";
 import splinePlugin from "./spline-assets.plugin.js";
 import figmaPlugin from "./figma-inspiration.plugin.js";
+import componentRegistryPlugin, {
+  provider as componentRegistryProvider,
+} from "./component-registry.plugin.js";
+import motionCatalogPlugin, {
+  provider as motionCatalogProvider,
+} from "./motion-catalog.plugin.js";
+import { summarizeProjectProfile } from "../../analysis/project-profile.js";
+import { summarizeCreativeBrief } from "../../analysis/creative-brief.js";
+import { INTENT_CATEGORIES } from "../../analysis/intent-taxonomy.js";
+import type { RegisteredComponentMetadata } from "../../providers/component-registry-provider.js";
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
 const fixturesDir = path.join(currentDir, "fixtures");
@@ -209,6 +219,146 @@ async function main(): Promise<void> {
   assert(
     mapped[1].notes === "No description set on this component in Figma.",
     "empty description falls back to an explanatory note, not a blank string",
+  );
+
+  // --- component registry plugin: register/search/get, real execution ----
+  registry.register(componentRegistryPlugin);
+  await registry.enable("example-component-registry");
+  const componentFixture: RegisteredComponentMetadata = {
+    id: "card-pricing",
+    name: "PricingCard",
+    category: "card",
+    filePath: "components/ui/pricing-card.tsx",
+    variants: ["default", "highlighted"],
+    dependencies: ["framer-motion"],
+    animated: true,
+    themeable: true,
+    darkModeSupport: true,
+    respectsReducedMotion: true,
+    usageExample: "<PricingCard plan={plan} />",
+  };
+  componentRegistryProvider.register(componentFixture);
+  assert(
+    componentRegistryProvider.get("card-pricing")?.name === "PricingCard",
+    "component registry get() finds a registered component by id",
+  );
+  const cardSearchResults = await componentRegistryProvider.search({ category: "card" });
+  assert(
+    cardSearchResults.some((entry) => entry.id === "card-pricing"),
+    "component registry search() finds the registered component by category",
+  );
+  assert(
+    registry
+      .getByCapability("component-registry")
+      .some((plugin) => plugin.metadata.id === "example-component-registry"),
+    "getByCapability finds the enabled component-registry plugin",
+  );
+
+  // --- motion catalog plugin: recommend() heuristic, real execution -------
+  registry.register(motionCatalogPlugin);
+  await registry.enable("example-motion-catalog");
+  const heroRecommendations = motionCatalogProvider.recommend(
+    "hero section reveal entrance",
+  );
+  assert(
+    heroRecommendations.some((entry) => entry.id === "hero-reveal"),
+    "motion catalog recommend() surfaces HeroReveal for a hero-section use case",
+  );
+  assert(
+    registry
+      .getByCapability("motion-catalog")
+      .some((plugin) => plugin.metadata.id === "example-motion-catalog"),
+    "getByCapability finds the enabled motion-catalog plugin",
+  );
+
+  // --- registry.list() reflects real enabled/disabled state ---------------
+  const listed = registry.list();
+  assert(
+    listed.find((entry) => entry.metadata.id === "example-component-registry")
+      ?.enabled === true,
+    "list() reports the component-registry plugin as enabled",
+  );
+  assert(
+    listed.find((entry) => entry.metadata.id === "example-figma-inspiration")?.enabled ===
+      false,
+    "list() reports the figma plugin as registered but not enabled (its enable() was rejected above)",
+  );
+
+  // --- unregister(): rejects while enabled, succeeds once disabled --------
+  let unregisterRejected = false;
+  try {
+    registry.unregister("example-motion-catalog");
+  } catch {
+    unregisterRejected = true;
+  }
+  assert(unregisterRejected, "unregister() throws on a still-enabled plugin");
+
+  await registry.disable("example-component-registry");
+  registry.unregister("example-component-registry");
+  assert(
+    registry.get("example-component-registry") === undefined,
+    "unregister() removes a disabled plugin from the registry",
+  );
+
+  // --- analysis summarizers: real string output against fixture data ------
+  const profileSummary = summarizeProjectProfile({
+    framework: {
+      name: "Next.js (App Router)",
+      version: "14.2.0",
+      routingStyle: "app router",
+    },
+    styling: { system: "Tailwind CSS", designTokensFound: ["--color-primary"] },
+    motion: {
+      librariesInstalled: ["framer-motion"],
+      existingReducedMotionHandling: true,
+    },
+    typescript: { strict: true, pathAliases: ["@/*"] },
+    namingConventions: {
+      componentFiles: "PascalCase.tsx",
+      hookFiles: "camelCase useX.ts",
+    },
+  });
+  assert(
+    profileSummary.includes("Framework: Next.js (App Router) (14.2.0)"),
+    "summarizeProjectProfile renders the framework line",
+  );
+  assert(
+    profileSummary.includes("Existing reduced-motion handling: yes"),
+    "summarizeProjectProfile renders motion.existingReducedMotionHandling",
+  );
+
+  const briefSummary = summarizeCreativeBrief({
+    goals: ["Convert cold traffic into demo signups"],
+    constraints: ["Ship within the existing Tailwind design tokens"],
+    audience: "A cold visitor comparing options",
+    visualStyle: "Confident and restrained, one accent moment",
+    interactionModel: "Linear scroll, one primary CTA repeated",
+    accessibilityConsiderations: [],
+    performanceTargets: [],
+    animationStrategy: "stripe preset",
+  });
+  assert(
+    briefSummary.includes("Goals: Convert cold traffic into demo signups"),
+    "summarizeCreativeBrief renders goals",
+  );
+  assert(
+    briefSummary.includes("Animation strategy: stripe preset"),
+    "summarizeCreativeBrief renders animation strategy",
+  );
+
+  // --- intent taxonomy: structural integrity of the lookup table ----------
+  assert(
+    INTENT_CATEGORIES.length === 11,
+    "INTENT_CATEGORIES has all 11 documented categories",
+  );
+  const intentIds = new Set(INTENT_CATEGORIES.map((category) => category.id));
+  assert(
+    intentIds.size === INTENT_CATEGORIES.length,
+    "every INTENT_CATEGORIES entry has a unique id",
+  );
+  assert(
+    INTENT_CATEGORIES.every((category) => category.coreFeatures.length > 0),
+    "every INTENT_CATEGORIES entry documents at least one core feature",
   );
 
   if (failures > 0) {

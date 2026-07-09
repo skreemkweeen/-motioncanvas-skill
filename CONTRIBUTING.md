@@ -64,9 +64,44 @@ motion primitive, provider, or reference example.
 - **No breaking changes to existing exported names/types** without a
   migration note in the PR description; prefer additive (new optional
   fields, new files) over rewriting what's there.
+- **Post-v1.0, no new infrastructure.** Before proposing a PR, ask: does
+  this directly improve the UI a developer receives from this skill? If
+  not — a new provider, registry, hook, context, config file, or reference
+  doc not attached to a concrete output-quality improvement — don't build
+  it. See `references/roadmap.md`'s "Next: output quality, not more
+  architecture" for the current priority areas, each of which requires a
+  before/after example in the PR, not just an assertion of improvement.
 
 ## Commit style
 
 Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, `refactor:`), one
 logical change per commit — a new subsystem and an unrelated formatting pass
 don't belong in the same commit.
+
+## Versioning
+
+`package.json`'s `version` exists to track this skill's own maturity, not to
+publish a package — nothing here is published to npm. Bump it (and add a
+`CHANGELOG.md` entry, and tag the commit `vX.Y.Z`) following semver's intent
+applied to `references/api-reference.md`'s Public symbols:
+
+- **Major** — a breaking change to a Public export's name/type/signature, or
+  removing a documented capability.
+- **Minor** — a new capability added additively: a new motion primitive,
+  provider implementation, plugin, or reference doc.
+- **Patch** — bug fixes, documentation corrections, and stability-review
+  cleanup (dead code, unused exports) that don't change the Public surface.
+
+Update `CHANGELOG.md` (Keep a Changelog format) in the same PR that bumps
+the version — not as a follow-up. `.github/RELEASE_TEMPLATE.md` has the
+section headings to copy into the GitHub release notes when tagging.
+
+## Filing issues and PRs
+
+Use the bug report / feature request templates under
+`.github/ISSUE_TEMPLATE/` — the feature request template's scope checklist
+is the fastest way to catch a proposal that conflicts with "No fake
+integrations" or "No unjustified new dependencies" before any code gets
+written. PRs get `.github/pull_request_template.md`'s checklist, which
+mirrors the Setup commands above plus the "document in the same change" and
+"no breaking changes" rules from this file.
