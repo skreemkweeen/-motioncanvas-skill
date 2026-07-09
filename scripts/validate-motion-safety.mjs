@@ -24,14 +24,22 @@ const HIDDEN_STYLE_PATTERN = /opacity\s*:\s*0(?![.\d])/;
 const MARKER = "data-motion-reveal";
 const SKIP_FILES = new Set(["no-js-guard.tsx", "tokens.ts", "index.ts"]);
 
+// Comments get stripped before matching — every file in this directory
+// documents the marker in its doc comment, so a plain substring search
+// against the raw source would find that prose and report a false pass
+// even when the actual JSX attribute was removed.
+function stripComments(source) {
+  return source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+}
+
 let failed = false;
 
 for (const entry of readdirSync(motionDir)) {
   if (!entry.endsWith(".tsx") || SKIP_FILES.has(entry)) continue;
 
-  const contents = readFileSync(path.join(motionDir, entry), "utf8");
+  const code = stripComments(readFileSync(path.join(motionDir, entry), "utf8"));
 
-  if (HIDDEN_STYLE_PATTERN.test(contents) && !contents.includes(MARKER)) {
+  if (HIDDEN_STYLE_PATTERN.test(code) && !code.includes(MARKER)) {
     console.error(
       `✖ ${entry}: renders an "opacity: 0" starting state without the ${MARKER} marker — ` +
         "without it, this content stays invisible forever when JavaScript never runs " +
