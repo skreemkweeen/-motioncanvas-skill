@@ -6,7 +6,8 @@ export function Hero() {
   return (
     <section className="relative isolate overflow-hidden bg-neutral-950">
       <AuroraBackground
-        className="absolute inset-0 -z-10"
+        position="absolute"
+        className="inset-0 -z-10"
         colors={["#6366f1", "#8b5cf6", "#22d3ee"]}
       />
       <div className="mx-auto flex max-w-5xl flex-col items-start gap-6 px-6 py-32 sm:py-40">

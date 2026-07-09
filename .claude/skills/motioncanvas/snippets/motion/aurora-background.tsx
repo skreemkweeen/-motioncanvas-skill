@@ -23,6 +23,16 @@ export interface AuroraBackgroundProps extends Omit<
   colors?: readonly [string, string, string];
   /** Seconds for one drift cycle. */
   duration?: number;
+  /**
+   * "relative" for standalone use (the component sizes itself around its
+   * own children); "absolute" to fill a positioned ancestor — pass
+   * `className="inset-0 -z-10"` (or the CSS equivalent) alongside it, the
+   * way `examples/ai-saas-landing/hero.tsx` does for a full-bleed hero
+   * background. An inline `style` always wins over a `className`, so a
+   * `position: absolute` utility class alone has no effect here — that's
+   * a real bug this prop fixes, not a stylistic choice.
+   */
+  position?: "relative" | "absolute";
 }
 
 export function AuroraBackground({
@@ -30,17 +40,14 @@ export function AuroraBackground({
   className,
   colors = ["#8b5cf6", "#3b82f6", "#10b981"],
   duration = 18,
+  position = "relative",
   ...props
 }: AuroraBackgroundProps) {
   const rawId = useId();
   const id = rawId.replace(/[^a-zA-Z0-9]/g, "");
 
   return (
-    <div
-      className={className}
-      style={{ position: "relative", overflow: "hidden" }}
-      {...props}
-    >
+    <div className={className} style={{ position, overflow: "hidden" }} {...props}>
       <style>{`
         @keyframes aurora-drift-${id} {
           0%, 100% { transform: translate(-10%, -10%) scale(1); }

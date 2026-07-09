@@ -45,6 +45,9 @@ diagram. Short version:
   `tokens/README.md`.
 - `examples/` — complete, narrated reference builds.
 - `analysis/` — the `ProjectProfile` type for the repo-intelligence step.
+- `showcase/` — a fully isolated (own `package.json`/tooling, never a
+  dependency of the commands above) before/after screenshot pipeline; see
+  `showcase/README.md`.
 
 `references/extending.md` has step-by-step instructions for adding a new
 motion primitive, provider, or reference example.

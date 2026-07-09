@@ -172,6 +172,11 @@ request shapes — dashboard, component modernization, design critique, motion
 enhancement, design system generation, and repository analysis — without
 duplicating a full codebase per scenario; see its `README.md` for why.
 
+`showcase/` has real, rendered before/after screenshots (desktop/tablet/
+mobile) for the same kind of comparison, when seeing the difference matters
+more than reading about it — a fully isolated pipeline, never a dependency
+of this skill's own tooling; see its `README.md`.
+
 ## Contributing to this skill
 
 See the repo root's `CONTRIBUTING.md` for setup and rules, and

@@ -8,10 +8,10 @@ export function Cta() {
       <Reveal>
         <AnimatedBorder borderRadius={20} background="var(--background, #0a0a0a)">
           <div className="px-8 py-12">
-            <h2 className="text-2xl font-semibold tracking-tight">
+            <h2 className="text-2xl font-semibold tracking-tight text-white">
               Try Fieldnote on your next call
             </h2>
-            <p className="mt-3 text-muted-foreground">No credit card. Cancel any time.</p>
+            <p className="mt-3 text-white/70">No credit card. Cancel any time.</p>
             <div className="mt-6 flex justify-center">
               <PremiumButton>Start free trial</PremiumButton>
             </div>
