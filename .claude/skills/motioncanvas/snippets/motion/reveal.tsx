@@ -7,6 +7,9 @@
  * enters the viewport, once, by default.
  *
  * Requires <MotionProvider> ancestor (../motion-provider).
+ *
+ * Marked `data-motion-reveal` so it degrades to visible instead of stuck
+ * hidden when JavaScript never runs — see `./no-js.css`.
  */
 
 import type { ReactNode } from "react";
@@ -48,6 +51,7 @@ export function Reveal({
 
   return (
     <m.div
+      data-motion-reveal
       initial={{ opacity: 0, x: offset.x, y: offset.y }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
       viewport={{ once, amount }}

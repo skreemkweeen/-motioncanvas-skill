@@ -69,6 +69,19 @@ const variants = shouldReduceMotion
   : { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } };
 ```
 
+## Progressive enhancement (no-JS safety)
+
+Motion is an enhancement, not a requirement to perceive content. Any
+viewport/mount-triggered reveal (`whileInView`, `initial` + `animate`) hides
+its content in the server-rendered HTML until JavaScript runs to reveal it —
+if JS is disabled, blocked, or fails to load, that content stays invisible
+forever unless the primitive explicitly guards against it. See
+`snippets/motion/README.md`'s "Progressive enhancement (no-JS safety)"
+section for the concrete mechanism (`data-motion-reveal` marker +
+`no-js.css` + `NoJsGuardScript`) this library's entrance primitives use.
+When building a new one, carry the same marker rather than treating this as
+a one-off fix for whichever component happened to need it first.
+
 ## Performance
 
 - Animate `transform`/`opacity` only where possible — avoid animating

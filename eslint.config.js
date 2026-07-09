@@ -27,13 +27,10 @@ export default tseslint.config(
   {
     // Node-executed dev scripts (not shipped, not type-checked as part of
     // the TS program) — declare the Node globals they use instead of
-    // pulling in the `globals` package for two identifiers.
+    // pulling in the `globals` package for a handful of identifiers.
     files: ["scripts/**/*.mjs"],
     languageOptions: {
-      globals: {
-        process: "readonly",
-        console: "readonly",
-      },
+      globals: { console: "readonly", process: "readonly", URL: "readonly" },
     },
   },
 );

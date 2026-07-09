@@ -7,6 +7,9 @@
  *
  * Requires the tree to be wrapped in <MotionProvider> (../motion-provider)
  * since it renders `m.div`.
+ *
+ * Marked `data-motion-reveal` so it degrades to visible instead of stuck
+ * hidden when JavaScript never runs — see `./no-js.css`.
  */
 
 import type { ReactNode } from "react";
@@ -31,6 +34,7 @@ export function Fade({
 }: FadeProps) {
   return (
     <m.div
+      data-motion-reveal
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
