@@ -1,18 +1,19 @@
-// Real before/after screenshot capture for showcase/landing-page/ — not a
-// mockup. Bundles the actual after/App.tsx (which imports the real,
-// shipped examples/ai-saas-landing/ components) and baseline/App.tsx with
-// esbuild, compiles the after side's real Tailwind utility classes against
-// the real generated snippets/tailwind-theme-extension.ts, then screenshots
-// both at three real viewport sizes with Playwright.
+// Real before/after screenshot capture for showcase/<name>/ — not a mockup.
+// Bundles the actual after/entry.tsx (which imports real, shipped
+// examples/ components) and baseline/entry.tsx with esbuild, compiles the
+// after side's real Tailwind utility classes against the real generated
+// snippets/tailwind-theme-extension.ts, then screenshots both at three real
+// viewport sizes with Playwright, plus one dark-mode desktop capture of the
+// after side.
 //
 // Isolated on purpose: this script, its dependencies (esbuild, tailwindcss,
 // playwright, framer-motion, react/react-dom), and its own package.json
 // live entirely under showcase/ — see ../README.md. Run with `npm run
-// capture` from this directory. Never wired into the root repo's
-// typecheck/lint/CI.
+// capture` (all showcases) or `npm run capture -- <name>` (one showcase)
+// from this directory. Never wired into the root repo's typecheck/lint/CI.
 
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import esbuild from "esbuild";
@@ -21,8 +22,6 @@ import { chromium } from "playwright";
 const showcaseDir = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const skillDir = path.dirname(showcaseDir);
 const tmpDir = path.join(showcaseDir, ".tmp");
-const landingPageDir = path.join(showcaseDir, "landing-page");
-const screenshotsDir = path.join(landingPageDir, "screenshots");
 
 // The sandbox's pre-installed Chromium build predates what this Playwright
 // version expects by default — launch against it explicitly rather than
@@ -35,9 +34,25 @@ const VIEWPORTS = {
   mobile: { width: 390, height: 844 },
 };
 
-function ensureDirs() {
-  mkdirSync(tmpDir, { recursive: true });
-  mkdirSync(screenshotsDir, { recursive: true });
+// Showcases whose "after" side actually declares dark-mode support (see its
+// own README) — not every showcase does; examples/ai-saas-landing/ is a
+// deliberately single-theme page with one dark hero island, not a
+// dark-mode-toggleable design, so forcing `.dark` on it would produce a
+// misleading screenshot (unstyled dark-on-dark text) rather than a real
+// finding. Add a showcase's name here only when its "after" component was
+// actually built to support both themes.
+const DARK_MODE_SHOWCASES = new Set(["dashboard"]);
+
+/** Any showcase/<name>/ with both an after/ and baseline/ entry point. */
+function discoverShowcases() {
+  return readdirSync(showcaseDir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .filter(
+      (name) =>
+        existsSync(path.join(showcaseDir, name, "after", "entry.tsx")) &&
+        existsSync(path.join(showcaseDir, name, "baseline", "entry.tsx")),
+    );
 }
 
 /** Transpile the real tailwind-theme-extension.ts to CJS so tailwind.config.cjs can require() it. */
@@ -52,7 +67,7 @@ async function transpileTailwindThemeExtension() {
   });
 }
 
-/** Compile the real Tailwind config (theme.extend = the transpiled file above) against the real component source. */
+/** Compile the shared Tailwind config (content globs cover every showcase's after/ + all of examples/snippets) once. */
 function compileTailwindCss() {
   const bin = path.join(showcaseDir, "node_modules", ".bin", "tailwindcss");
   execFileSync(
@@ -70,8 +85,8 @@ function compileTailwindCss() {
   );
 }
 
-// after/App.tsx imports real components from examples/ai-saas-landing/,
-// which sits outside showcase/'s own directory tree — esbuild's default
+// A showcase's after/ side imports real components from examples/, which
+// sits outside showcase/'s own directory tree — esbuild's default
 // node-style resolution would walk up *their* location and find the repo
 // root's own node_modules/react instead of showcase/'s copy, bundling two
 // separate React instances (the classic "invalid hook call" bug). Alias
@@ -92,10 +107,10 @@ const SHARED_PACKAGE_ALIASES = {
   ),
 };
 
-async function bundleEntry(name) {
+async function bundleEntry(showcaseName, side) {
   const result = await esbuild.build({
-    entryPoints: [path.join(landingPageDir, name, "entry.tsx")],
-    outfile: path.join(tmpDir, `${name}.bundle.js`),
+    entryPoints: [path.join(showcaseDir, showcaseName, side, "entry.tsx")],
+    outfile: path.join(tmpDir, `${side}.bundle.js`),
     bundle: true,
     format: "iife",
     platform: "browser",
@@ -105,38 +120,37 @@ async function bundleEntry(name) {
     alias: SHARED_PACKAGE_ALIASES,
   });
   if (result.errors.length > 0) {
-    throw new Error(`esbuild failed for ${name}: ${JSON.stringify(result.errors)}`);
+    throw new Error(
+      `esbuild failed for ${showcaseName}/${side}: ${JSON.stringify(result.errors)}`,
+    );
   }
 }
 
-function writeHtmlShell(name, { extraCss = "" } = {}) {
+function writeHtmlShell(side, { extraCss = "", dark = false } = {}) {
   const tokensCss = readFileSync(path.join(skillDir, "snippets", "tokens.css"), "utf8");
   const html = `<!doctype html>
-<html>
+<html${dark ? ' class="dark"' : ""}>
 <head>
 <meta charset="utf-8" />
 <style>${tokensCss}</style>
 ${extraCss ? `<style>${extraCss}</style>` : ""}
-<style>* { box-sizing: border-box; } body { margin: 0; }</style>
+<style>* { box-sizing: border-box; } body { margin: 0; background: var(--color-background); }</style>
 </head>
 <body>
 <div id="root"></div>
-<script src="./${name}.bundle.js"></script>
+<script src="./${side}.bundle.js"></script>
 </body>
 </html>`;
-  const outPath = path.join(tmpDir, `${name}.html`);
+  const outPath = path.join(tmpDir, `${side}${dark ? "-dark" : ""}.html`);
   writeFileSync(outPath, html, "utf8");
   return outPath;
 }
 
-async function screenshotAll(name, htmlPath) {
+async function screenshotVariant(screenshotsDir, outNamePrefix, htmlPath, viewports) {
   const browser = await chromium.launch({ executablePath: CHROMIUM_EXECUTABLE });
   try {
-    for (const [viewportName, viewport] of Object.entries(VIEWPORTS)) {
-      const context = await browser.newContext({
-        viewport,
-        reducedMotion: "reduce",
-      });
+    for (const [viewportName, viewport] of Object.entries(viewports)) {
+      const context = await browser.newContext({ viewport, reducedMotion: "reduce" });
       const page = await context.newPage();
       await page.goto(`file://${htmlPath}`);
       await page.waitForLoadState("networkidle");
@@ -164,7 +178,7 @@ async function screenshotAll(name, htmlPath) {
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.waitForTimeout(150);
 
-      const outPath = path.join(screenshotsDir, `${name}-${viewportName}.png`);
+      const outPath = path.join(screenshotsDir, `${outNamePrefix}-${viewportName}.png`);
       await page.screenshot({ path: outPath, fullPage: true });
       console.log(`ok: captured ${path.relative(showcaseDir, outPath)}`);
       await context.close();
@@ -174,25 +188,58 @@ async function screenshotAll(name, htmlPath) {
   }
 }
 
-async function main() {
-  ensureDirs();
+async function captureShowcase(showcaseName, afterCss) {
+  console.log(`\n=== ${showcaseName} ===`);
+  const screenshotsDir = path.join(showcaseDir, showcaseName, "screenshots");
+  mkdirSync(screenshotsDir, { recursive: true });
 
-  await transpileTailwindThemeExtension();
-  compileTailwindCss();
-  const afterCss = readFileSync(path.join(tmpDir, "after-tailwind.css"), "utf8");
-
-  await bundleEntry("after");
-  await bundleEntry("baseline");
+  await bundleEntry(showcaseName, "after");
+  await bundleEntry(showcaseName, "baseline");
 
   const afterHtml = writeHtmlShell("after", { extraCss: afterCss });
   const baselineHtml = writeHtmlShell("baseline");
 
   if (!existsSync(afterHtml) || !existsSync(baselineHtml)) {
-    throw new Error("HTML shells were not written");
+    throw new Error(`HTML shells were not written for ${showcaseName}`);
   }
 
-  await screenshotAll("after", afterHtml);
-  await screenshotAll("baseline", baselineHtml);
+  await screenshotVariant(screenshotsDir, "after", afterHtml, VIEWPORTS);
+  await screenshotVariant(screenshotsDir, "baseline", baselineHtml, VIEWPORTS);
+
+  if (DARK_MODE_SHOWCASES.has(showcaseName)) {
+    const afterDarkHtml = writeHtmlShell("after", { extraCss: afterCss, dark: true });
+    if (!existsSync(afterDarkHtml)) {
+      throw new Error(`Dark-mode HTML shell was not written for ${showcaseName}`);
+    }
+    // One desktop capture of the after side only — the baseline has no
+    // dark-mode support by design (see its own showcase README), and three
+    // more viewports per showcase would be a lot of near-duplicate images
+    // for what this capture is meant to prove (the token mechanism works),
+    // not a full responsive dark-mode audit.
+    await screenshotVariant(screenshotsDir, "after-dark", afterDarkHtml, {
+      desktop: VIEWPORTS.desktop,
+    });
+  }
+}
+
+async function main() {
+  mkdirSync(tmpDir, { recursive: true });
+
+  await transpileTailwindThemeExtension();
+  compileTailwindCss();
+  const afterCss = readFileSync(path.join(tmpDir, "after-tailwind.css"), "utf8");
+
+  const requested = process.argv[2];
+  const showcases = requested ? [requested] : discoverShowcases();
+  if (showcases.length === 0) {
+    throw new Error(
+      "No showcases found — expected at least one showcase/<name>/{after,baseline}/entry.tsx",
+    );
+  }
+
+  for (const name of showcases) {
+    await captureShowcase(name, afterCss);
+  }
 
   console.log("\nAll showcase screenshots captured.");
 }

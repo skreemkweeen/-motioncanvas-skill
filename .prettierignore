@@ -2,3 +2,9 @@ node_modules/
 package-lock.json
 .claude/settings.local.json
 LICENSE
+
+# showcase/'s own throwaway build scratch space (esbuild bundles, compiled
+# Tailwind CSS, generated HTML shells) — gitignored by showcase/.gitignore,
+# but Prettier doesn't consult nested .gitignore files the way git itself
+# does, so it needs to be listed here explicitly too.
+.claude/skills/motioncanvas/showcase/.tmp/

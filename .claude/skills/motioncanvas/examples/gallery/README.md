@@ -1,25 +1,31 @@
 # Example gallery
 
-Seven narrated walkthroughs of this skill's workflow against seven different
-request shapes. Each is **Prompt → Expected workflow → Generated artifacts →
+Narrated walkthroughs of this skill's workflow against different request
+shapes. Each is **Prompt → Expected workflow → Generated artifacts →
 Explanation** — a demonstration of the reasoning and reference material the
 workflow actually invokes, not a second full codebase.
 
 That's a deliberate scope choice, not a shortcut: `examples/ai-saas-landing/`
-is this skill's one complete, fully-coded reference build (see its own
-README's "Showcase checklist"), and PR#4 explicitly kept it that way —
-"showcase-quality upgrade to the one reference example, not more examples."
-Seven more full builds would be seven more codebases to keep in sync with
-every future change to `snippets/motion/`, the token compiler, or the review
-pipeline, for marginal benefit over seven good walkthroughs that point at the
-same real material. If a walkthrough below says a primitive, preset, or
-provider is used, that primitive/preset/provider is real and typechecked
-elsewhere in this repo — nothing here is invented for the example's sake.
+and `examples/analytics-dashboard/` are this skill's two complete,
+fully-coded reference builds (see each one's own README "Showcase
+checklist", and `showcase/` for real before/after screenshots of both).
+Six more full builds for the remaining walkthroughs below would be six more
+codebases to keep in sync with every future change to `snippets/motion/`,
+the token compiler, or the review pipeline, for marginal benefit over good
+walkthroughs that point at the same real material — a full build only
+graduates out of this gallery when there's a concrete reason (per
+`references/roadmap.md`'s output-quality phase) to prove it with real
+screenshots, as `02-dashboard.md` did. If a walkthrough below says a
+primitive, preset, or provider is used, that primitive/preset/provider is
+real and typechecked elsewhere in this repo — nothing here is invented for
+the example's sake.
 
 ## The seven
 
 1. [`01-landing-page.md`](01-landing-page.md) — new marketing page
-2. [`02-dashboard.md`](02-dashboard.md) — data-dense internal app screen
+2. [`02-dashboard.md`](02-dashboard.md) — data-dense internal app screen;
+   graduated to a full reference build, see `examples/analytics-dashboard/`
+   and `showcase/dashboard/`
 3. [`03-component-modernization.md`](03-component-modernization.md) —
    upgrading an existing component rather than building new
 4. [`04-design-critique.md`](04-design-critique.md) — evaluating existing UI,

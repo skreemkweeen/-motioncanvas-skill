@@ -10,5 +10,5 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["landing-page/**/*.tsx", "tooling/**/*.ts"]
+  "include": ["*/after/**/*.tsx", "*/baseline/**/*.tsx", "tooling/**/*.ts"]
 }

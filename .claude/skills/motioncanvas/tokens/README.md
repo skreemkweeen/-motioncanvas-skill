@@ -34,3 +34,29 @@ editing one, edit `design-tokens.ts` instead and rerun the build.
 `npm run tokens:build` also runs Prettier on the four generated files, so
 `npm run format` stays clean without hand-formatting template-string
 output.
+
+## A real gotcha: Tailwind's opacity modifier doesn't work on these colors
+
+`bg-primary/10`, `text-success/50`, and similar Tailwind opacity-modifier
+syntax silently produce a **fully transparent** color against
+`tailwindThemeExtension`'s colors. They're plain hex strings referencing
+`snippets/tokens.css`'s CSS custom properties (`var(--color-primary)`), not
+the "R G B" space-separated triplet format Tailwind's opacity-channel
+injection needs to compose an alpha value into. Found the hard way in
+`showcase/dashboard/` — a status badge's `bg-success/10` rendered as
+unfilled text with no background at all; see
+`showcase/dashboard/VISUAL_DIFF.md`'s "What building this showcase
+actually found" for the full story.
+
+If you need a tinted/transparent variant of a token color, use
+`color-mix()` against the CSS variable directly instead:
+
+```tsx
+style={{ backgroundColor: "color-mix(in srgb, var(--color-success) 12%, transparent)" }}
+```
+
+See `examples/analytics-dashboard/data-table.tsx` for a real, working
+example. This isn't a limitation worth "fixing" by reformatting every
+token as an RGB triplet — that would break every existing
+`var(--color-x)` reference across `snippets/tokens.css` and every
+component built against it for one syntax convenience.
