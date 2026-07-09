@@ -27,7 +27,7 @@ export const SKILL_COMMANDS: readonly SkillCommand[] = [
     aliases: ["create", "generate", "add"],
     category: "build",
     description:
-      "The default workflow: build or extend UI in a React/Next.js codebase, following SKILL.md's pipeline.",
+      "The default workflow: build or extend UI in a React/Next.js codebase, following motioncanvas-core's gate sequence.",
     examples: [
       "build a landing page for...",
       "add a pricing section",

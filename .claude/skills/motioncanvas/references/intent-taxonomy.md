@@ -21,9 +21,10 @@ Application type (which category below)
   -> Information architecture
   -> Layout strategy
   -> Design system (references/design-system.md, tokens/)
+  -> VisualIdentity (references/visual-identity-engine.md)
   -> Motion style (the category's recommended preset, snippets/motion/presets.ts)
   -> Component plan (references/component-composition.md)
-  -> Implementation plan (SKILL.md's Workflow)
+  -> Implementation plan (the matching motioncanvas-* skill's gate sequence)
 ```
 
 For a vague request ("build me a fintech dashboard"), this pipeline is

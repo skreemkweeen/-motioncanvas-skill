@@ -13,6 +13,13 @@ plus a real check (`validate.ts`, run via `npm run validate:registry`) that
 those references haven't drifted — a renamed or deleted file that a command
 entry still points at is a build failure, not a silent doc rot.
 
+**This predates, and is a different thing from, the real slash commands** at
+the repo root (`.claude/commands/*.md` — `/motioncanvas`, `/dashboard`,
+`/landing`, `/review-ui`, `/motion`, `/design-system`). Those are live
+Claude Code commands a user actually types; this file stays a metadata
+catalog for the underlying build/critique/profile modes those commands and
+the `motioncanvas-*` skills draw on, not a duplicate of them.
+
 ## Adding a command entry
 
 1. Add an entry to `SKILL_COMMANDS` in `registry.ts` with a real

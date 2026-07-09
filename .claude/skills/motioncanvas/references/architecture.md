@@ -1,15 +1,43 @@
 # Architecture
 
-How the pieces of this skill fit together. Keep both diagrams in sync with
-reality when adding/removing a file in `references/`, `snippets/`,
-`providers/`, `plugins/`, `commands/`, `tokens/`, `examples/`, or
-`analysis/` — an inaccurate diagram is worse than none.
+How the pieces of this skill family fit together. Keep both diagrams in
+sync with reality when adding/removing a file in `references/`,
+`snippets/`, `providers/`, `plugins/`, `commands/`, `tokens/`, `examples/`,
+`analysis/`, a `motioncanvas-*` skill, or a `.claude/commands/*.md` slash
+command — an inaccurate diagram is worse than none.
 
-## Skill structure
+## Skill family
 
 ```mermaid
 flowchart TD
-    SKILL["SKILL.md<br/>(entry point)"]
+    CORE["motioncanvas-core"]
+    DASH["motioncanvas-dashboard"]
+    LAND["motioncanvas-landing"]
+    REV["motioncanvas-review"]
+    MOT["motioncanvas-motion"]
+    DS["motioncanvas-design-system"]
+    LIB["motioncanvas/<br/>(shared library)"]
+
+    CORE --> LIB
+    DASH --> LIB
+    LAND --> LIB
+    REV --> LIB
+    MOT --> LIB
+    DS --> LIB
+
+    CMDS["/motioncanvas, /dashboard, /landing,<br/>/review-ui, /motion, /design-system"] -.->|"explicit invocation"| CORE
+    CMDS -.-> DASH
+    CMDS -.-> LAND
+    CMDS -.-> REV
+    CMDS -.-> MOT
+    CMDS -.-> DS
+```
+
+## Shared library structure
+
+```mermaid
+flowchart TD
+    SKILL["SKILL.md<br/>(shared library entry point,<br/>not typically triggered directly)"]
 
     SKILL --> REF["references/"]
     SKILL --> SNIP["snippets/"]
@@ -28,6 +56,8 @@ flowchart TD
     REF --> PRDOC["providers.md"]
     REF --> EXT["extending.md"]
     REF --> PM["prompt-modules.md"]
+    REF --> VIE["visual-identity-engine.md<br/>(originality scoring,<br/>anti-generic rules)"]
+    REF --> EP["execution-principles.md"]
 
     SNIP --> MOT["motion/<br/>(12 primitives + 8 presets)"]
     SNIP --> HOOKS["MotionProvider,<br/>useMagneticButton,<br/>usePremiumScroll"]
@@ -50,24 +80,32 @@ flowchart TD
     TOKENS --> COMP["compile-*.ts<br/>(CSS/Tailwind/types/JSON)"]
 
     AN --> PP["project-profile.ts"]
+    AN --> CB["creative-brief.ts"]
+    AN --> VI["visual-identity.ts<br/>(KNOWN_GENERIC_PATTERNS)"]
 
     EX --> LAND["ai-saas-landing/<br/>(reference build)"]
+    EX --> DASH["analytics-dashboard/<br/>(reference build)"]
 ```
 
-## Workflow pipeline
+## Gate sequence (each motioncanvas-* skill)
 
 ```mermaid
 flowchart LR
-    A["Intent +<br/>requirements"] --> B["Research<br/>(analysis/)"]
-    B --> C["Planning +<br/>layout"]
-    C --> D["Design system<br/>(tokens/)"]
-    D --> E["Components<br/>(sourcing order)"]
-    E --> F["Motion<br/>(motion/, presets.ts)"]
-    F --> G["A11y + perf +<br/>review<br/>(review-pipeline.md)"]
-    G --> H["Code +<br/>documentation"]
+    A["ProjectProfile<br/>(project-profile.ts)"] --> B["CreativeBrief<br/>(creative-brief.ts)"]
+    B --> C["VisualIdentity<br/>(visual-identity.ts,<br/>originality score)"]
+    C --> D["ComponentPlan<br/>(sourcing order)"]
+    D --> E["MotionPlan<br/>(motion-director.md)"]
+    E --> F["Implementation"]
+    F --> G["DesignCritique<br/>(execution-principles.md,<br/>visual-identity-engine.md)"]
 
-    A -.->|"review-only ask"| X["design-critique-mode.md"]
+    A -.->|"review-only ask"| X["motioncanvas-review /<br/>design-critique-mode.md"]
 ```
+
+Each skill scopes this sequence, not the order — `motioncanvas-review` runs
+only ProjectProfile + DesignCritique; `motioncanvas-motion` skips
+CreativeBrief/VisualIdentity/ComponentPlan since it assumes structure
+already exists. See each skill's own `SKILL.md` for exactly which gates it
+requires.
 
 ## What's real vs. interface-only
 

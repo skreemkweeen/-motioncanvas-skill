@@ -262,7 +262,7 @@ export const INTENT_CATEGORIES: readonly IntentCategory[] = [
       "Whichever single primitive fits — see snippets/motion/README.md",
     ],
     notes:
-      "The 'don't over-plan' category — SKILL.md's own rule (\"a single button doesn't need a wireframe phase\") applies directly. Skip the intent-taxonomy/creative-brief steps entirely for a true single-component ask.",
+      "The 'don't over-plan' category — every motioncanvas-* skill's own proportionality rule (\"a single button doesn't need a wireframe phase\") applies directly. Skip the intent-taxonomy/creative-brief/visual-identity gates entirely for a true single-component ask.",
   },
   {
     id: "animation-request",
