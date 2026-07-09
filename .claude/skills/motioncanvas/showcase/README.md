@@ -50,6 +50,10 @@ components a showcase covers.
 
 ## Showcases
 
+See [`INDEX.md`](INDEX.md) for the status checklist (done vs. planned) with
+embedded before/after screenshots, prompts, and links to source for each
+completed showcase — the "portfolio" view. Short version:
+
 - [`landing-page/`](landing-page/README.md) — the AI SaaS landing page from
   `examples/ai-saas-landing/` vs. a plausible default/unguided generation of
   the same request.
